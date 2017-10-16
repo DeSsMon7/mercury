@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DeviceViewDlg" widgetVar="DeviceViewDialog" modal="true" resizable="false" appendTo="@(body)" header="Devices">
+            <h:form id="DeviceViewForm"  style="width: 700px; height: 35em" >
+                <p:dataTable id="datalist" var="deviceItem" editable="true" value="#{deviceController.items}"
+                             scrollable="true"   scrollHeight="370" >
+                    <p:column headerText="Id">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{deviceItem.deviceId}"/></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="#{deviceItem.deviceId}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Brand">
+                        <p:cellEditor>
+                            <f:facet name="output"> <h:outputText value="#{deviceItem.deviceBrand}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{deviceItem.deviceModel}" style="width:100%" /></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Type">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{deviceItem.deviceType}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{deviceItem.deviceType}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Customer Firstname">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{deviceItem.customerId.customerFirstname}"  /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{deviceItem.customerId.customerFirstname}" style="width:100%" /></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Customer Surname">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{deviceItem.customerId.customerFirstname}"  /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{deviceItem.customerId.customerFirstname}" style="width:100%" /></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column  style="width:20px">
+                      <p:rowEditor editTitle="Edit" saveTitle="Save" cancelTitle="Cancel"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

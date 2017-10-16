@@ -1,0 +1,146 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.ash.mercury.orders.model;
+
+import com.ash.mercury.customer.model.Customer;
+import com.ash.mercury.employee.model.Employee;
+import com.ash.mercury.device.model.Device;
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+
+/**
+ *
+ * @author Timmy
+ */
+@Entity
+@Table(name = "orders")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o")
+    , @NamedQuery(name = "Orders.findByOrderId", query = "SELECT o FROM Orders o WHERE o.orderId = :orderId")
+    , @NamedQuery(name = "Orders.findByOrderDate", query = "SELECT o FROM Orders o WHERE o.orderDate = :orderDate")
+    , @NamedQuery(name = "Orders.findByOrderInfo", query = "SELECT o FROM Orders o WHERE o.orderInfo = :orderInfo")
+    , @NamedQuery(name = "Orders.findByCustomerId", query = "SELECT o FROM Orders o WHERE o.customerId = :customerId")})
+public class Orders implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "order_id")
+    private Integer orderId;
+    @Column(name = "order_date")
+    @Temporal(TemporalType.DATE)
+    private Date orderDate;
+    @Size(max = 300)
+    @Column(name = "order_info")
+    private String orderInfo;
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
+    @ManyToOne
+    private Customer customerId;
+    @JoinColumn(name = "device_id", referencedColumnName = "device_id")
+    @ManyToOne
+    private Device deviceId;
+    @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
+    @ManyToOne
+    private Employee employeeId;
+
+    public Orders() {
+    }
+
+    public Orders(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getOrderInfo() {
+        return orderInfo;
+    }
+
+    public void setOrderInfo(String orderInfo) {
+        this.orderInfo = orderInfo;
+    }
+
+    public Customer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Customer customerId) {
+        this.customerId = customerId;
+    }
+
+    public Device getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(Device deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public Employee getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Employee employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (orderId != null ? orderId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Orders)) {
+            return false;
+        }
+        Orders other = (Orders) object;
+        if ((this.orderId == null && other.orderId != null) || (this.orderId != null && !this.orderId.equals(other.orderId))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.ash.mercury.customer.model.Orders[ orderId=" + orderId + " ]";
+    }
+    
+}

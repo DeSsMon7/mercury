@@ -1,0 +1,259 @@
+package com.ash.mercury.officeorder.pres;
+
+import com.ash.mercury.customer.control.CustomerFacade;
+import com.ash.mercury.customer.model.Customer;
+import com.ash.mercury.device.control.DeviceFacade;
+import com.ash.mercury.device.model.Device;
+import com.ash.mercury.officeorder.model.OfficeOrder;
+import com.ash.mercury.officeorder.pres.util.JsfUtil;
+import com.ash.mercury.officeorder.pres.util.JsfUtil.PersistAction;
+import com.ash.mercury.officeorder.control.OfficeOrderFacade;
+import com.ash.mercury.part.control.PartFacade;
+import com.ash.mercury.part.model.Part;
+import com.ash.mercury.servicepart.control.ServicePartFacade;
+import com.ash.mercury.servicepart.model.ServicePart;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJBException;
+import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+import javax.inject.Inject;
+
+@Named("officeOrderController")
+@SessionScoped
+public class OfficeOrderController implements Serializable {
+
+    private List<OfficeOrder> items = null;
+    private List<Device> selectedDevice;
+    private List<Customer> selectedCustomer;
+    private List<Part> partList;
+    private List<ServicePart> servicePart;
+    private OfficeOrder selected;
+    private Integer customerId;
+    private Integer deviceId;
+
+    @Inject
+    CustomerFacade customerFacade;
+    @Inject
+    DeviceFacade deviceFacade;
+    @Inject
+    PartFacade partFacade;
+    @Inject
+    ServicePartFacade servicePartFacade;
+    @Inject
+    OfficeOrderFacade ejbFacade;
+
+    public OfficeOrderController() {
+    }
+
+    public void initDevices() {
+        selectedDevice = new ArrayList();
+        try {
+            System.out.println("OfficeOrder CustomerId: " + selected.getCustomerId().getCustomerId() + selected.getCustomerId().getCustomerFirstname());
+            selectedDevice = deviceFacade.findDevices(selected.getCustomerId().getCustomerId());
+            System.out.println(Arrays.asList(selectedDevice));
+        } catch (NullPointerException e) {
+            System.out.println("OfficeOrder DevicesList Error" + e);
+        }
+    }
+
+    public OfficeOrder getSelected() {
+        return selected;
+    }
+
+    public void setSelected(OfficeOrder selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private PartFacade getPartFacade() {
+        return partFacade;
+    }
+
+    private OfficeOrderFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public OfficeOrder prepareCreate() {
+        selected = new OfficeOrder();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/msgs_EN").getString("OfficeOrderCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/msgs_EN").getString("OfficeOrderUpdated"));
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/msgs_EN").getString("OfficeOrderDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<OfficeOrder> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction != PersistAction.DELETE) {
+                    getFacade().edit(selected);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/msgs_EN").getString("PersistenceErrorOccured"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/msgs_EN").getString("PersistenceErrorOccured"));
+            }
+        }
+    }
+
+    public OfficeOrder getOfficeOrder(java.lang.Integer id) {
+        return getFacade().find(id);
+    }
+
+    public List<OfficeOrder> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<OfficeOrder> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+
+    @FacesConverter(forClass = OfficeOrder.class)
+    public static class OfficeOrderControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            OfficeOrderController controller = (OfficeOrderController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "officeOrderController");
+            return controller.getOfficeOrder(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof OfficeOrder) {
+                OfficeOrder o = (OfficeOrder) object;
+                return getStringKey(o.getOfficeOrderId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), OfficeOrder.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+    public List<Part> getPartList() {
+        System.out.println("Print GETPARTLIST: " + partList);
+        return getPartFacade().findAll();
+    }
+
+    public void setPartList(List<Part> partList) {
+        this.partList = partList;
+    }
+
+    public List<ServicePart> getServicePart() {
+        return servicePart;
+    }
+
+    public void setServicePart(List<ServicePart> servicePart) {
+        this.servicePart = servicePart;
+    }
+
+    public List<Device> getSelectedDevice() {
+        return selectedDevice;
+//       return selectedDevice = deviceController.getDeviceByCustomerId(customerId);
+    }
+
+    public void setSelectedDevice(List<Device> selectedDevice) {
+        this.selectedDevice = selectedDevice;
+    }
+
+    public List<Customer> getSelectedCustomer() {
+        if (selectedCustomer == null) {
+            selectedCustomer = new ArrayList();
+            selectedCustomer = customerFacade.findAll();
+        }
+        return selectedCustomer;
+    }
+
+    public void setSelectedCustomer(List<Customer> selectedCustomer) {
+        this.selectedCustomer = selectedCustomer;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public Integer getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(Integer deviceId) {
+        this.deviceId = deviceId;
+    }
+
+}

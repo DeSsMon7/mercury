@@ -1,0 +1,92 @@
+package com.ash.mercury.device.model;
+
+import com.ash.mercury.customer.model.Customer;
+import com.ash.mercury.device.control.DeviceFacade;
+import com.ash.mercury.login.beans.SessionUtils;
+import java.io.Serializable;
+import java.util.List;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.persistence.RollbackException;
+import javax.servlet.http.HttpSession;
+
+/**
+ *
+ * @author Timmy
+ */
+@ManagedBean
+@Named(value = "deviceBean")
+@SessionScoped
+
+public class DeviceBean implements Serializable {
+
+    @Inject
+    DeviceFacade deviceFacade;
+
+    private String deviceType;
+    private String deviceBrand;
+    private String deviceModel;
+    private Integer customerId;
+    private HttpSession session;
+    private List<Customer> customersList;
+
+    public DeviceBean() {
+    }
+
+    public String create() {
+        System.out.println("DeviceCreateMethod Invoked!");
+        session = SessionUtils.getSession();
+        try {
+            deviceFacade.createDevice(deviceType, deviceBrand, deviceModel, customerId);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Device Added!", deviceModel));
+        } catch (RollbackException e) {
+            System.out.println("Cannot create device" + e);
+        }
+        return "devices.xhtml";
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getDeviceBrand() {
+        return deviceBrand;
+    }
+
+    public void setDeviceBrand(String deviceBrand) {
+        this.deviceBrand = deviceBrand;
+    }
+
+    public String getDeviceModel() {
+        return deviceModel;
+    }
+
+    public void setDeviceModel(String deviceModel) {
+        this.deviceModel = deviceModel;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public List<Customer> getCustomersList() {
+        return customersList;
+    }
+
+    public void setCustomersList(List<Customer> customersList) {
+        this.customersList = customersList;
+    }
+
+}

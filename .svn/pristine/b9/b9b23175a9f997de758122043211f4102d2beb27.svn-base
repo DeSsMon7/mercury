@@ -1,0 +1,41 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.ash.mercury.officeorder.control;
+
+import com.ash.mercury.officeorder.model.OfficeOrder;
+import java.math.BigDecimal;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+/**
+ *
+ * @author Timmy
+ */
+@Stateless
+public class OfficeOrderFacade extends AbstractFacade<OfficeOrder> {
+
+    @PersistenceContext(unitName = "com.ash_mercury_war_1.0-SNAPSHOTPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public OfficeOrderFacade() {
+        super(OfficeOrder.class);
+    }
+    
+    public void updateOfficeOrder(OfficeOrder f ){
+    em.createNativeQuery("UPDATE office_orders SET office_order_sum = ?1 WHERE office_order_id = ?2")
+            .setParameter(1, f.getOfficeOrderSum())
+            .setParameter(2, f.getOfficeOrderId())
+            .executeUpdate();
+    }
+    
+    
+}

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/indexTemplate.xhtml">
+
+
+
+        <ui:define name="mainMenu">
+            <h:form id="mainMenuForm">
+                <p:menubar>
+                    <p:menuitem value="#{msgs_EN.Home}" outcome="/index" icon="ui-icon-home"/>
+                    <p:submenu label="#{msgs_EN.Maintenance}">
+                        <p:menuitem value="Customer" outcome="/customer/List.xhtml" />
+                        <p:menuitem value="Device" outcome="/device/devices.xhtml" />
+                        <p:menuitem value="Employee" outcome="/employee/List.xhtml" />
+                        <p:menuitem value="Orders" outcome="/orders/List.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Greetings,   #{login.employeeLogin}" icon="ui-icon-person" style="float: right">
+                        <p:menuitem value="Customer" outcome="/customer/List.xhtml" />
+                        <p:menuitem value="Device" outcome="/device/List.xhtml" />
+                        <p:menuitem value="Employee" outcome="/employee/List.xhtml" />
+                        <p:menuitem value="Orders" outcome="/orders/List.xhtml" />
+                        <p:separator/>
+                        <p:menuitem icon="ui-icon-power" value="Logout" outcome="/login.xhtml" actionListener="#{login.logout(e)}" />
+                    </p:submenu>
+                </p:menubar> 
+            </h:form>
+        </ui:define>
+
+
+
+        <ui:define name="body">   
+
+
+        </ui:define>
+
+        <ui:define name="leftMenu">
+            <h:form id="leftMenuForm" >
+                <p:menubar style="display: block">
+                    <p:menuitem id="createDevice" value="Add Device" icon="ui-icon-plus"  oncomplete="PF('DeviceCreateDialog').show()"/>
+                    <p:menuitem id="viewDevice" value="View all" icon="ui-icon-search" oncomplete="PF('DeviceViewDialog').show()"/>
+                </p:menubar>
+                <p:separator/>
+            </h:form>
+            <ui:include src="createNewDevice.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PartCreateDlg" widgetVar="PartCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msgs_EN.CreatePartTitle}">
+            <h:form id="PartCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{partController.selected != null}">
+                        <p:outputLabel value="#{msgs_EN.CreatePartLabel_partInfo}" for="partInfo" />
+                        <p:inputText id="partInfo" value="#{partController.selected.partInfo}" title="#{msgs_EN.CreatePartTitle_partInfo}" />
+                        <p:outputLabel value="#{msgs_EN.CreatePartLabel_partUnitPrice}" for="partUnitPrice" />
+                        <p:inputText id="partUnitPrice" value="#{partController.selected.partUnitPrice}" title="#{msgs_EN.CreatePartTitle_partUnitPrice}">
+                            <f:convertNumber currencyCode="BGN"  pattern="###,###.###" locale="bg"/>
+                        </p:inputText>
+                        <p:outputLabel value="#{msgs_EN.CreatePartLabel_partInstock}" for="partInstock" />
+                        <p:inputText id="partInstock" value="#{partController.selected.partInstock}" title="#{msgs_EN.CreatePartTitle_partInstock}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{partController.create}" value="#{msgs_EN.Save}" update="display,:PartListForm:datalist,:growl" oncomplete="handleSubmit(args,'PartCreateDialog');"/>
+                    <p:commandButton value="#{msgs_EN.Cancel}" onclick="PartCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

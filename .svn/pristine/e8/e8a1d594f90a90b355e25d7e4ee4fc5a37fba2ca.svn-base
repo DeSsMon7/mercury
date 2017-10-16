@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="OfficeOrderEditDlg" widgetVar="OfficeOrderEditDialog" modal="true" resizable="true"  maximizable="true" appendTo="@(body)" header="#{msgs_EN.EditOfficeOrderTitle}">
+            <h:form id="OfficeOrderEditForm">
+                <h:panelGroup id="display" rendered="#{officeOrderController.selected != null}" style="width: 80%">
+                    <p:panelGrid columns="2" >
+                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderId}"/>
+                        <h:outputText value="#{officeOrderController.selected.officeOrderId}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderId}"/>
+                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderDate}"/>
+                        <h:outputText value="#{officeOrderController.selected.officeOrderDate}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderInfo}"/>
+                        <h:outputText value="#{officeOrderController.selected.officeOrderInfo}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderInfo}"/>
+                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_customerId}"/>
+                        <h:outputText value="#{officeOrderController.selected.customerId}" title="#{msgs_EN.ViewOfficeOrderTitle_customerId}"/>
+                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_deviceId}"/>
+                        <h:outputText value="#{officeOrderController.selected.deviceId}" title="#{msgs_EN.ViewOfficeOrderTitle_deviceId}"/>
+                        <hr/>
+                        <p:spacer height="20px"/>
+                        <p:fieldset legend="Сервизни Части" style="width: 400px" toggleable="true" collapsed="true" toggleSpeed="500">
+                            <h:outputText value="Сменени Части:" style="font-size: 18px;g"/>
+                            <div style="display: block;float: right; position: relative;">
+                                <p:commandButton  style="padding: 0.5px;width: 150px" ajax="true" icon="ui-icon-wrench" value="Добави части" actionListener="#{officeOrderController.prepareServicePartList}" update="" oncomplete="PF('OfficeOrderServicePartDialog').show()"/>
+                            </div>
+                            <br/>    
+                            <br/>
+                            <p:dataTable id="partsCreateTable" 
+                                         value="#{officeOrderController.servicePart}" 
+                                         scrollable="true" 
+                                         scrollHeight="100"
+                                         var="serviceParts"
+                                         rowKey="#{serviceParts}"
+                                         emptyMessage="Не са добавени сервизни части."
+                                         style="font-size:  10px !important">
+                               
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Part ID"/>
+                                    </f:facet>
+                                    <h:outputText value="#{serviceParts.partId}" />
+                                </p:column>
+                                <p:column headerText="Qty">
+                                    <h:outputText value="#{serviceParts.partQuantity}"/>
+                                </p:column>
+                                <p:column headerText="Price per Unit">
+                                    <h:outputText value="#{serviceParts.partUnitPrice}"/>
+                                </p:column>
+                                <p:column headerText="Total Price">
+                                    <h:outputText value="#{serviceParts.partTotalPrice}"/>
+                                </p:column>
+                                <p:column headerText="Office Order Id">
+                                    <h:outputText value="#{serviceParts.servicePartId }"/>
+                                </p:column>
+                            </p:dataTable>
+                            <p:commandButton icon="ui-icon-trash" ajax="true" style="padding: 0.5px;float: right" />
+                            <p:spacer height="15"/>
+                        </p:fieldset>
+                        <hr  />
+                        <p:outputLabel value="#{msgs_EN.EditOfficeOrderLabel_employeeId}" for="employeeId" />
+                        <p:selectOneMenu id="employeeId" value="#{officeOrderController.selected.employeeId}" >
+                            <f:selectItem itemLabel="#{msgs_EN.SelectOneMessage}"/>
+                            <f:selectItems value="#{employeeController.itemsAvailableSelectOne}"
+                                           var="employeeIdItem"
+                                           itemValue="#{employeeIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{msgs_EN.EditOfficeOrderLabel_officeOrderSum}" for="officeOrderSum" />
+                        <p:inputText id="officeOrderSum" value="#{officeOrderController.selected.officeOrderSum}" title="#{msgs_EN.EditOfficeOrderTitle_officeOrderSum}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{officeOrderController.update}" value="#{msgs_EN.Save}" update="display,:OfficeOrderListForm:datalist,:growl" oncomplete="handleSubmit(args, 'OfficeOrderEditDialog');"/>
+                    <p:commandButton value="#{msgs_EN.Cancel}" onclick="OfficeOrderEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+        <ui:include src="servicePart.xhtml"/>
+    </ui:composition>
+</html>

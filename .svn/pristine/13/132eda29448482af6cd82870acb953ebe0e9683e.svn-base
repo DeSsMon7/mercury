@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="indexTemplate.xhtml">
+
+
+
+        <ui:define name="mainMenu">
+            <h:form id="mainMenuForm">
+                <p:menubar>
+                    <p:menuitem value="#{msgs_EN.Home}" outcome="/index" icon="ui-icon-home"/>
+                    <p:submenu label="#{msgs_EN.Maintenance}">
+                        <p:menuitem value="Customer" outcome="/customer/List.xhtml" />
+                        <p:menuitem value="Device" outcome="/device/List.xhtml" />
+                        <p:menuitem value="Employee" outcome="/employee/List.xhtml" />
+                        <p:menuitem value="Orders" outcome="/officeOrder/List.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Greetings,   #{login.employeeLogin}" icon="ui-icon-person" style="float: right">
+                        <p:menuitem value="Customer" outcome="/customer/List.xhtml" />
+                        <p:menuitem value="Device" outcome="/device/List.xhtml" />
+                        <p:menuitem value="Employee" outcome="/employee/List.xhtml" />
+                        <p:menuitem value="Parts" outcome="/part/List.xhtml" />
+                        <p:menuitem value="Orders" outcome="/officeOrder/List.xhtml" />
+                        <p:menuitem value="Service Parts" outcome="/servicePart/List.xhtml" />
+                        <p:separator/>
+                        <p:menuitem icon="ui-icon-power" value="Logout" outcome="/login.xhtml" actionListener="#{login.logout(e)}" />
+                    </p:submenu>
+                </p:menubar> 
+            </h:form>
+        </ui:define>
+
+
+
+        <ui:define name="body">   
+
+
+        </ui:define>
+
+        <ui:define name="leftMenu">
+            <h:form id="leftMenuForm" >
+                <p:slideMenu style="width:162px;border-style: hidden">
+                    <p:submenu label="Customers" >
+                        <p:menuitem id="createCustomer" value="Add Customer" icon="ui-icon-plus"  action="#{customerController.prepareCreate(event)}"  oncomplete="PF('CustomerCreateDialog').show()"/>
+                        <p:menuitem id="viewCustomer" value="View all" icon="ui-icon-search" oncomplete="PF('CustomerViewDialog').show()"/>
+                        <p:menuitem value="Employee" outcome="/employee/List" />
+                    </p:submenu>
+                    <p:separator/>
+                    <p:submenu label="Device" >
+                        <p:menuitem id="createDevice" value="Add Device" icon="ui-icon-plus" action="#{deviceController.prepareCreate(event)}" oncomplete="PF('DeviceCreateDialog').show()" />
+                        <p:menuitem value="Active orders" outcome="/device/List"/>
+                        <p:menuitem value="View all" outcome="/employee/List" />
+                    </p:submenu>
+                    <p:submenu label="Orders" >
+                        <p:menuitem value="New order"  outcome="/customer/List"/>
+                        <p:menuitem value="Active orders" outcome="/device/List"/>
+                        <p:menuitem value="View all" outcome="/employee/List" />
+                    </p:submenu>
+                </p:slideMenu>
+            </h:form>
+            <ui:include src="customer/List.xhtml"/>
+        </ui:define>
+
+    </ui:composition>
+</html>

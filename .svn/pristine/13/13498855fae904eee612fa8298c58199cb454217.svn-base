@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="InvoiceCreateDlg" widgetVar="InvoiceCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msgs_EN.CreateInvoiceTitle}">
+            <h:form id="InvoiceCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{invoiceController.selected != null}">
+                        <p:outputLabel value="#{msgs_EN.CreateInvoiceLabel_invoiceDate}" for="invoiceDate" />
+                        <p:calendar id="invoiceDate" pattern="MM/dd/yyyy" value="#{invoiceController.selected.invoiceDate}" title="#{msgs_EN.EditInvoiceTitle_invoiceDate}"  showOn="button"/>
+
+                        <p:outputLabel value="#{msgs_EN.CreateInvoiceLabel_customerId}" for="customerId" />
+                        <p:selectOneMenu id="customerId" value="#{invoiceController.selected.customerId}" >
+                            <f:selectItem itemValue="#{customerIdItem}" itemLabel="Select Customer"/>
+                            <f:selectItems value="#{customerController.itemsAvailableSelectOne}"
+                                           var="customerIdItem"
+                                           itemValue="#{customerIdItem}"/>
+                            <p:ajax listener="#{invoiceController.initCustomerOrder}" update="officeOrderId"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{msgs_EN.CreateInvoiceLabel_officeOrderId}" for="officeOrderId" />
+                        <p:selectOneMenu id="officeOrderId" value="#{invoiceController.selected.officeOrderId}" >
+                            <f:selectItem itemValue="#{officeOrderIdItem}" itemLabel="Select Customer Order"/>
+                            <f:selectItems value="#{invoiceController.customerOrder}"
+                                           var="officeOrderIdItem"
+                                           itemValue="#{officeOrderIdItem}"/>
+                            <p:ajax listener="#{invoiceController.initInvoicePrice}" update="invoicePrice"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{msgs_EN.CreateInvoiceLabel_employeeId}" for="employeeId" />
+                        <p:selectOneMenu id="employeeId" value="#{invoiceController.selected.employeeId}" >
+                            <f:selectItems value="#{employeeController.itemsAvailableSelectOne}"
+                                           var="employeeIdItem"
+                                           itemValue="#{employeeIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{msgs_EN.CreateInvoiceLabel_invoicePrice}" for="invoicePrice" />
+                        <h:outputText id="invoicePrice" value="#{invoiceController.selected.invoicePrice}" title="#{msgs_EN.CreateInvoiceTitle_invoicePrice}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{invoiceController.createInvoice}" value="#{msgs_EN.Save}" update="display,:InvoiceListForm:datalist,:growl" oncomplete="handleSubmit(args,'InvoiceCreateDialog');"/>
+                    <p:commandButton value="#{msgs_EN.Cancel}" onclick="InvoiceCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

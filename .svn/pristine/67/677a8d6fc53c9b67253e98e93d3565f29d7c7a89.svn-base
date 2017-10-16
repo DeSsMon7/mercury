@@ -1,0 +1,28 @@
+package com.ash.mercury.part.control;
+
+import com.ash.mercury.customer.control.AbstractFacade;
+import com.ash.mercury.part.model.Part;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+/**
+ *
+ * @author Timmy
+ */
+@Stateless
+public class PartFacade extends AbstractFacade<Part> {
+
+    @PersistenceContext(unitName = "com.ash_mercury_war_1.0-SNAPSHOTPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public PartFacade() {
+        super(Part.class);
+    }
+    
+}

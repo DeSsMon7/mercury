@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{msgs_EN.ListInvoiceTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="OfficeOrderActiveForm">
+                <p:dataTable id="officeOrderActiveList" style="width: 98% !important; text-align: center;" scrollRows="10" scrollable="true" liveScroll="true" scrollHeight="200"
+                             var="activeItems" 
+                             value="#{officeOrderController.activeOrders}">
+                    <f:facet name="header">
+                        Assigned Orders
+                    </f:facet>
+                    <p:column headerText="Id">
+                        <h:outputText value="#{activeItems.officeOrderId}" />
+                    </p:column>
+                    <p:column headerText="Order Description">
+                        <h:outputText value="#{activeItems.officeOrderInfo}" />
+                    </p:column>
+                    <p:column headerText="Device" width="70">
+                        <h:outputText value="#{activeItems.deviceId.deviceModel}" />
+                    </p:column>
+                    <p:column headerText="Order Description">
+                        <h:outputText value="#{activeItems.customerId.customerFirstname} #{activeItems.customerId.customerSurname}" />
+                    </p:column>
+                    <p:column headerText="Status">
+                        <h:outputText value="#{activeItems.officeOrderServiceStatus}" />
+                    </p:column>
+                    <p:column headerText="Service Date">
+                        <h:outputText value="#{activeItems.officeOrderServiceDate}" />
+                    </p:column>
+                    <p:column headerText="Service Specialist">
+                        <h:outputText value="#{activeItems.employeeId.employeeLogin}" />
+                    </p:column>
+                    <p:column style="width:32px;">
+                        <p:commandButton icon="ui-icon-search" title="View" 
+                                         update=":OfficeOrderActiveForm:officeOrderActiveList, :OfficeOrderEditForm:display"
+                                         oncomplete="PF('OfficeOrderEditDialog').show()">
+                            <f:setPropertyActionListener value="#{activeItems}" target="#{officeOrderController.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <!--                    <div class="ui-g">
+                                        <div class="ui-g-12 ui-md-6 ui-lg-3" style="display: block; height: 500px !important">      
+                                            <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderId}"/>
+                                            <h:outputText value="#{officeOrderController.selected.officeOrderId}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderId}"/>
+                                            <br/>
+                                            <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderDate}"/>
+                                            <h:outputText value="#{officeOrderController.selected.officeOrderDate}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderDate}">
+                                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                                            </h:outputText>
+                                            <br/>
+                                            <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderInfo}"/>
+                                            <h:outputText value="#{officeOrderController.selected.officeOrderInfo}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderInfo}"/>
+                                            <br/>
+                                            <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_customerId}"/>
+                                            <h:outputText value="#{officeOrderController.selected.customerId}" title="#{msgs_EN.ViewOfficeOrderTitle_customerId}"/>
+                                            <br/>
+                                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_deviceId}"/>
+                                            <h:outputText value="#{officeOrderController.selected.deviceId}" title="#{msgs_EN.ViewOfficeOrderTitle_deviceId}"/>
+                                            <br/>
+                                            <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_employeeId}"/>
+                                            <h:outputText value="#{officeOrderController.selected.employeeId}" title="#{msgs_EN.ViewOfficeOrderTitle_employeeId}"/>
+                                            <br/>
+                                            <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderSum}"/>
+                                            <h:outputText value="#{officeOrderController.selected.officeOrderSum}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderSum}"/>
+                                        </div>
+                
+                                    </div>-->
+            </h:form>
+            <ui:include src="Edit.xhtml"/>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

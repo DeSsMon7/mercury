@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="OfficeOrderServicePartDlg" widgetVar="OfficeOrderServicePartDialog" 
+                  resizable="true"
+                  maximizable="true"
+                  appendTo="@(body)"
+                  header="#{msgs_EN.EditOfficeOrderTitle}">
+            <h:form id="OfficeOrderServicePartForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2">
+                        <p:panel header="Part List">
+                            <p:dataTable id="servicepartsCreateTable" 
+                                         value="#{officeOrderController.partList}" 
+                                         scrollable="true" 
+                                         scrollHeight="300"
+                                         var="part"
+                                         rowKey="#{part.partId}"
+                                         emptyMessage="Не са добавени сервизни части."
+                                         selection="#{officeOrderController.partForCreate}">
+
+                                <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                                <p:column headerText="ID">
+                                    <h:outputText value="#{part.partId}" />
+                                </p:column>
+                                <p:column headerText="Qty">
+                                    <h:outputText value="#{part.partInfo}"/>
+                                </p:column>
+                                <p:column headerText="Price per Unit">
+                                    <h:outputText value="#{part.partUnitPrice}"/>
+                                </p:column>
+                                <p:column headerText="Instock">
+                                    <h:outputText value="#{part.partInstock}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </p:panel>
+
+                        <p:panel header="Избрани части за добавяне">
+                            <p:dataList id="partsForCreate" value="#{officeOrderController.partsForCreate}" var="partForCreate">
+                                <p:column headerText="Име">
+                                    <h:outputText value="#{partForCreate.partInfo}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <h:outputText value="#{partForCreate.partInstock}"/>
+                                </p:column>
+                            </p:dataList>
+                        </p:panel>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{officeOrderController.insertParts}" style="float: right" value="add" update="display,:OfficeOrderServicePartForm:partsForCreate,:growl"/>
+                    <p:commandButton value="#{msgs_EN.Cancel}" onclick="OfficeOrderEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

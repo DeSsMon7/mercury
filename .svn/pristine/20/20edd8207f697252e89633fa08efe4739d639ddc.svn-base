@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DeviceViewDlg" widgetVar="DeviceViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msgs_EN.ViewDeviceTitle}">
+            <h:form id="DeviceViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{deviceController.selected != null}">
+                        <h:outputText value="#{msgs_EN.ViewDeviceLabel_deviceId}"/>
+                        <h:outputText value="#{deviceController.selected.deviceId}" title="#{msgs_EN.ViewDeviceTitle_deviceId}"/>
+                        <h:outputText value="#{msgs_EN.ViewDeviceLabel_deviceType}"/>
+                        <h:outputText value="#{deviceController.selected.deviceType}" title="#{msgs_EN.ViewDeviceTitle_deviceType}"/>
+                        <h:outputText value="#{msgs_EN.ViewDeviceLabel_deviceBrand}"/>
+                        <h:outputText value="#{deviceController.selected.deviceBrand}" title="#{msgs_EN.ViewDeviceTitle_deviceBrand}"/>
+                        <h:outputText value="#{msgs_EN.ViewDeviceLabel_deviceModel}"/>
+                        <h:outputText value="#{deviceController.selected.deviceModel}" title="#{msgs_EN.ViewDeviceTitle_deviceModel}"/>
+                        <h:outputText value="#{msgs_EN.ViewDeviceLabel_customerId}"/>
+                        <h:outputText value="#{deviceController.selected.customerId}" title="#{msgs_EN.ViewDeviceTitle_customerId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{msgs_EN.Close}" onclick="DeviceViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,32 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.ash.mercury.serviceslist.control;
+
+import com.ash.mercury.serviceslist.model.ServicesList;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+/**
+ *
+ * @author Timmy
+ */
+@Stateless
+public class ServicesListFacade extends AbstractFacade<ServicesList> {
+
+    @PersistenceContext(unitName = "com.ash_mercury_war_1.0-SNAPSHOTPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public ServicesListFacade() {
+        super(ServicesList.class);
+    }
+    
+}

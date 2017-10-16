@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title><ui:insert name="title">#{msgs_en.AppName}</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="growl" life="3000" />
+
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north" size="65" header="#{msgs_EN.AppName}">
+                <h:form >
+                    <p:menubar>
+                        <p:menuitem value="#{msgs_EN.Home}" outcome="/index" icon="ui-icon-home"/>
+                        <p:submenu label="#{msgs_EN.Maintenance}">
+                            <p:menuitem value="Customer" outcome="/customer/List.xhtml" />
+                            <p:menuitem value="Device" outcome="/device/List.xhtml" />
+                            <p:menuitem value="Employee" outcome="/employee/List.xhtml" />
+                            <p:menuitem value="Orders" outcome="/orders/List.xhtml" />
+                        </p:submenu>
+                        <p:submenu label="Greetings,   #{login.employeeLogin}" icon="ui-icon-person" style="float: right">
+                            <p:menuitem value="Customer" outcome="/customer/List.xhtml" />
+                            <p:menuitem value="Device" outcome="/device/List.xhtml" />
+                            <p:menuitem value="Employee" outcome="/employee/List.xhtml" />
+                            <p:menuitem value="Orders" outcome="/orders/List.xhtml" />
+                            <p:separator/>
+                            <p:menuitem icon="ui-icon-power" value="Logout" outcome="/login.xhtml" actionListener="#{login.logout(e)}" />
+                        </p:submenu>
+                    </p:menubar>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="40">
+                <h:outputText style="font-family: string;font-size: 15px; float: right;margin-top: 5px;margin-right: 10px;" value="mercury© 2017">
+                </h:outputText> 
+
+                <span style="font-family: fantasy; font-size: 18px;padding-left: 5px">
+                    <a href="http://ashcode.tk" style="color: lawngreen"> bbm™</a>
+                </span>
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="center">
+                <ui:insert name="body"/>
+            </p:layoutUnit>
+
+        </p:layout>
+
+    </h:body>
+
+</html>

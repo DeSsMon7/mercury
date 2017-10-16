@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DeviceEditDlg" widgetVar="DeviceEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msgs_EN.EditDeviceTitle}">
+            <h:form id="DeviceEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{deviceController.selected != null}">
+                        <p:outputLabel value="#{msgs_EN.EditDeviceLabel_deviceId}" for="deviceId" />
+                        <p:inputText id="deviceId" value="#{deviceController.selected.deviceId}" title="#{msgs_EN.EditDeviceTitle_deviceId}" required="true" requiredMessage="#{msgs_EN.EditDeviceRequiredMessage_deviceId}"/>
+                        <p:outputLabel value="#{msgs_EN.EditDeviceLabel_deviceType}" for="deviceType" />
+                        <p:inputText id="deviceType" value="#{deviceController.selected.deviceType}" title="#{msgs_EN.EditDeviceTitle_deviceType}" />
+                        <p:outputLabel value="#{msgs_EN.EditDeviceLabel_deviceBrand}" for="deviceBrand" />
+                        <p:inputText id="deviceBrand" value="#{deviceController.selected.deviceBrand}" title="#{msgs_EN.EditDeviceTitle_deviceBrand}" />
+                        <p:outputLabel value="#{msgs_EN.EditDeviceLabel_deviceModel}" for="deviceModel" />
+                        <p:inputText id="deviceModel" value="#{deviceController.selected.deviceModel}" title="#{msgs_EN.EditDeviceTitle_deviceModel}" />
+                        <p:outputLabel value="#{msgs_EN.EditDeviceLabel_customerId}" for="customerId" />
+                        <p:selectOneMenu id="customerId" value="#{deviceController.selected.customerId}" >
+                            <f:selectItem itemLabel="#{msgs_EN.SelectOneMessage}"/>
+                            <f:selectItems value="#{customerController.itemsAvailableSelectOne}"
+                                           var="customerIdItem"
+                                           itemValue="#{customerIdItem.customerFirstname}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{deviceController.update}" value="#{msgs_EN.Save}" update="display,:DeviceListForm:datalist,:growl" oncomplete="handleSubmit(args, 'DeviceEditDialog');"/>
+                    <p:commandButton value="#{msgs_EN.Cancel}" onclick="DeviceEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
