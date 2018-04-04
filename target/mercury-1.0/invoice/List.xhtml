@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{msgs_EN.ListInvoiceTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="InvoiceListForm">
+                <p:panel header="#{msgs_EN.ListInvoiceTitle}">
+                    <p:dataTable id="datalist" value="#{invoiceController.items}" var="item"
+                                 selectionMode="single" selection="#{invoiceController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.invoiceId}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListInvoiceTitle_invoiceId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.invoiceId}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListInvoiceTitle_invoiceDate}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.invoiceDate}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListInvoiceTitle_invoicePrice}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.invoicePrice}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListInvoiceTitle_customerId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.customerId}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListInvoiceTitle_employeeId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.employeeId}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListInvoiceTitle_officeOrderId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.officeOrderId}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{msgs_EN.Create}" actionListener="#{invoiceController.prepareCreate}" update=":InvoiceCreateForm" oncomplete="PF('InvoiceCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{msgs_EN.View}" update=":InvoiceViewForm" oncomplete="PF('InvoiceViewDialog').show()" disabled="#{empty invoiceController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{msgs_EN.Edit}" update=":InvoiceEditForm" oncomplete="PF('InvoiceEditDialog').show()" disabled="#{empty invoiceController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{msgs_EN.Delete}" actionListener="#{invoiceController.destroy}" update=":growl,datalist" disabled="#{empty invoiceController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

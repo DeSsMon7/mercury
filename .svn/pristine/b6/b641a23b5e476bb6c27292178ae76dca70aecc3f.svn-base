@@ -1,0 +1,560 @@
+package com.ash.mercury.officeorder.pres;
+
+import com.ash.mercury.customer.control.CustomerFacade;
+import com.ash.mercury.login.beans.SessionUtils;
+import com.ash.mercury.customer.model.Customer;
+import com.ash.mercury.device.control.DeviceFacade;
+import com.ash.mercury.device.model.Device;
+import com.ash.mercury.officeorder.model.OfficeOrder;
+import com.ash.mercury.customer.pres.util.JsfUtil;
+import com.ash.mercury.customer.pres.util.JsfUtil.PersistAction;
+import com.ash.mercury.employee.control.EmployeeFacade;
+import com.ash.mercury.employee.model.Employee;
+import com.ash.mercury.officeorder.control.OfficeOrderFacade;
+import com.ash.mercury.part.control.PartFacade;
+import com.ash.mercury.part.model.Part;
+import com.ash.mercury.part.pres.PartController;
+import com.ash.mercury.service.control.ServiceFacade;
+import com.ash.mercury.service.model.Service;
+import com.ash.mercury.servicepart.control.ServicePartFacade;
+import com.ash.mercury.servicepart.model.ServicePart;
+import com.ash.mercury.serviceslist.control.ServicesListFacade;
+import com.ash.mercury.serviceslist.model.ServicesList;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.control.SpinnerValueFactory;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJBException;
+import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+
+@Named("officeOrderController")
+@SessionScoped
+public class OfficeOrderController implements Serializable {
+
+    private List<OfficeOrder> items = null;
+    private List<OfficeOrder> filteredOrders;
+    private List<OfficeOrder> activeOrders;
+    private List<Device> selectedDevice;
+    private List<Customer> selectedCustomer;
+    private List<Part> partList;
+    private List<Part> partsForCreate;
+    private BigDecimal partsTotalPrice;
+    private Part partForCreate; // Обект Part
+    private List<ServicePart> serviceParts;
+    private ServicePart servicePartForCreate;
+    private List<Service> serviceItems; // List with Service(s)
+    private Service selectedService; // Object Service
+    private BigDecimal servicesTotalPrice;
+    private List<ServicesList> servicesList; //List with Service(s) applied to OfficeOrder
+    private ServicesList serviceForCreate; // Object in ServicesList to insert data from "Object Service"
+    private OfficeOrder selected;
+    private Integer customerId;
+    private Integer deviceId;
+    private List<Employee> serviceEmployeeList;
+    private HttpSession session;
+
+    @Inject
+    CustomerFacade customerFacade;
+    @Inject
+    DeviceFacade deviceFacade;
+    @Inject
+    PartFacade partFacade;
+    @Inject
+    ServicePartFacade servicePartFacade;
+    @Inject
+    ServiceFacade serviceFacade;
+    @Inject
+    ServicesListFacade servicesListFacade;
+    @Inject
+    EmployeeFacade employeeFacade;
+    @Inject
+    OfficeOrderFacade ejbFacade;
+
+    public OfficeOrderController() {
+    }
+
+    @PostConstruct
+    public void init() {
+        partList = new ArrayList();
+        partsForCreate = new ArrayList();
+        partForCreate = new Part();
+        serviceParts = new ArrayList();
+        servicePartForCreate = new ServicePart();
+        serviceItems = new ArrayList();
+        servicesList = new ArrayList();
+        selectedService = new Service();
+        serviceForCreate = new ServicesList();
+    }
+
+    // ActionListener for drop down to show devices by customer
+    public void initDevices() {
+        selectedDevice = new ArrayList();
+        try {
+            System.out.println("OfficeOrder CustomerId: " + selected.getCustomerId().getCustomerId() + selected.getCustomerId().getCustomerFirstname());
+            selectedDevice = deviceFacade.findDevices(selected.getCustomerId().getCustomerId());
+        } catch (NullPointerException e) {
+            System.out.println("OfficeOrder DevicesList Error" + e);
+        }
+    }
+
+    // Method to InsertParts into OfficeOrderEditFrom:partsCreateTable
+    public void insertParts() {
+        servicePartForCreate.setPartId(partForCreate.getPartId());
+        servicePartForCreate.setPartQuantity(partForCreate.getPartInstock());
+        servicePartForCreate.setPartUnitPrice(partForCreate.getPartUnitPrice());
+        servicePartForCreate.setOfficeOrderId(selected.getOfficeOrderId());
+        servicePartForCreate.setPartTotalPrice(partForCreate.getPartUnitPrice().multiply(new BigDecimal(servicePartForCreate.getPartQuantity())));
+        serviceParts.add(servicePartForCreate);
+//        for (int i = 0; i < serviceParts.size(); i++) {
+//            servicePartForCreate.setPartTotalPrice(serviceParts.get(i).getPartUnitPrice().multiply(new BigDecimal(serviceParts.get(i).getPartQuantity())));
+//            System.out.println("Total Price is: " + serviceParts.get(i).getPartTotalPrice());
+//            System.out.println("ServicePartId: " + serviceParts.get(i).getServicePartId());
+//            System.out.println("ServicePartId   PARTidz: " + serviceParts.get(i).getPartId());
+//        }
+        servicePartForCreate = new ServicePart();
+    }
+
+    public void preparePartList() {
+        System.out.println("Има ли ме?");
+        partList = partFacade.findAllParts();
+        partForCreate = null;
+        partForCreate = new Part();
+        // This is just for logging
+        for (int i = 0; i < partList.size(); i++) {
+            System.out.println("Part: " + partList.get(i).getPartInfo());
+        }
+    }
+
+    public void insertServices() {
+        serviceForCreate.setServiceId(selectedService.getServiceId());
+        serviceForCreate.setServicePrice(selectedService.getServicePrice());
+        serviceForCreate.setOfficeOrderId(selected.getOfficeOrderId());
+        servicesList.add(serviceForCreate);
+        for (int i = 0; i < servicesList.size(); i++) {
+            System.out.println("ServiceId: " + servicesList.get(i).getServiceId());
+            System.out.println("Service PRICE : " + servicesList.get(i).getServicePrice());
+        }
+        serviceForCreate = new ServicesList();
+    }
+
+    //Get List from ServiceFacade 
+    public void prepareServiceList() {
+        System.out.println("Викам ли си лист със Сервизни услуги от 'serviceItems' ");
+        serviceItems = serviceFacade.findAll();
+        selectedService = null;
+        selectedService = new Service();
+        for (int i = 0; i < serviceItems.size(); i++) {
+            System.out.println("Service: " + serviceItems.get(i).getServiceDescription() + "Service ID:" + serviceItems.get(i).getServiceId());
+        }
+    }
+
+    public OfficeOrder getSelected() {
+        if (selected == null) {
+            selected = new OfficeOrder();
+            System.out.println("Active Selected Id:" + selected.getOfficeOrderId());
+        }
+        return selected;
+    }
+
+    public void setSelected(OfficeOrder selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private OfficeOrderFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public OfficeOrder prepareCreate() {
+        selected = new OfficeOrder();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public String setStatus() {
+        String serviceStatus = "completed";
+        return serviceStatus;
+    }
+
+    public String setStatusAssign() {
+        String serviceStatus = "assigned";
+        return serviceStatus;
+    }
+
+    public void create() {
+        String officeOrderServiceStatus = "pending";
+        selected.setOfficeOrderServiceStatus(officeOrderServiceStatus);
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/msgs_EN").getString("OfficeOrderCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+
+    }
+
+    public void update() {
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/msgs_EN").getString("OfficeOrderUpdated"));
+    }
+
+    //Custom OfficeOrder UPDATE method0
+    public void updateSum() {
+        partsTotalPrice = new BigDecimal(0);
+        servicesTotalPrice = new BigDecimal(0);
+        BigDecimal officeOrderSum;
+        officeOrderSum = selected.getOfficeOrderSum();
+        if (serviceParts.size() > 0) {
+            for (int i = 0; i < serviceParts.size(); i++) {
+                partsTotalPrice = partsTotalPrice.add(serviceParts.get(i).getPartTotalPrice());
+            }
+        }
+
+        if (servicesList.size() > 0) {
+            for (int i = 0; i < servicesList.size(); i++) {
+                servicesTotalPrice = servicesTotalPrice.add(servicesList.get(i).getServicePrice());
+            }
+        }
+        if (officeOrderSum == null) {
+            selected.setOfficeOrderSum((partsTotalPrice.add(servicesTotalPrice)));
+            System.out.println("OfficeOrder Sum : " + selected.getOfficeOrderSum());
+            System.out.println("OfficeOrder parts Sum : " + partsTotalPrice);
+            System.out.println("OfficeOrder services Sum : " + servicesTotalPrice);
+        } else {
+            selected.setOfficeOrderSum(officeOrderSum.add(partsTotalPrice.add(servicesTotalPrice)));
+        }
+
+        selected.setOfficeOrderServiceStatus(setStatus());
+        selected.setOfficeOrderId(selected.getOfficeOrderId());
+        ejbFacade.updateOfficeOrder(selected);
+
+        for (int i = 0; i < serviceParts.size(); i++) {
+            serviceParts.get(i).setPartId(serviceParts.get(i).getPartId());
+            serviceParts.get(i).setPartQuantity(serviceParts.get(i).getPartQuantity());
+            serviceParts.get(i).setPartUnitPrice(serviceParts.get(i).getPartUnitPrice());
+            serviceParts.get(i).setPartTotalPrice(serviceParts.get(i).getPartUnitPrice().multiply(new BigDecimal(serviceParts.get(i).getPartQuantity())));
+            serviceParts.get(i).setOfficeOrderId(selected.getOfficeOrderId());
+            servicePartFacade.insertServicePart(serviceParts.get(i));
+        }
+
+        for (int i = 0; i < servicesList.size(); i++) {
+            servicesList.get(i).setServiceId(servicesList.get(i).getServiceId());
+            servicesList.get(i).setServicePrice(servicesList.get(i).getServicePrice());
+            servicesList.get(i).setOfficeOrderId(selected.getOfficeOrderId());
+            servicesListFacade.insertService(servicesList.get(i));
+        }
+
+        serviceParts = null;
+        servicesList = null;
+        serviceParts = new ArrayList();
+        servicesList = new ArrayList();
+
+    }
+
+    public void destroy() {
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/msgs_EN").getString("OfficeOrderDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void assignOrder() {
+        Employee serviceEmployee = new Employee();
+        String assigned = "assigned";
+        session = SessionUtils.getSession();
+        Integer serviceEmployeeId = (Integer) session.getAttribute("employeeId");
+        List<Employee> listEmployee = employeeFacade.findById(serviceEmployeeId);
+        serviceEmployee.setEmployeeId(listEmployee.get(0).getEmployeeId());
+        serviceEmployee.setEmployeeFirstname(listEmployee.get(0).getEmployeeFirstname());
+        serviceEmployee.setEmployeeSurname(listEmployee.get(0).getEmployeeSurname());
+        serviceEmployee.setEmployeeLogin(listEmployee.get(0).getEmployeeLogin());
+        serviceEmployee.setEmployeeEmail(listEmployee.get(0).getEmployeeEmail());
+
+        selected.setServiceEmployeeId(serviceEmployee);
+        selected.setOfficeOrderServiceStatus(assigned);
+        ejbFacade.updateAssignOrder(selected);
+
+        System.out.println("Selected order id: " + selected.getOfficeOrderId());
+
+    }
+
+    public List<OfficeOrder> getItems() {
+
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction != PersistAction.DELETE) {
+                    getFacade().edit(selected);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/msgs_EN").getString("PersistenceErrorOccured"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/msgs_EN").getString("PersistenceErrorOccured"));
+            }
+        }
+    }
+
+    public OfficeOrder getOfficeOrder(java.lang.Integer id) {
+        return getFacade().find(id);
+    }
+
+    public List<OfficeOrder> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<OfficeOrder> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
+    }
+
+    public List<OfficeOrder> getPendingOrders() {
+        System.out.println("Всеки път ли го викам тоя лист?");
+        String status = "pending";
+        return getFacade().findOrderByStatus(status);
+    }
+
+    public List<OfficeOrder> getAssignedOrders() {
+        List<OfficeOrder> assignList;
+        String status = "assigned";
+        assignList = ejbFacade.findOrderByStatus(status);
+        return assignList;
+    }
+
+    @FacesConverter(forClass = OfficeOrder.class)
+    public static class OfficeOrderControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            OfficeOrderController controller = (OfficeOrderController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "officeOrderController");
+            return controller.getOfficeOrder(getKey(value));
+        }
+
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
+            return key;
+        }
+
+        String getStringKey(java.lang.Integer value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value);
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof OfficeOrder) {
+                OfficeOrder o = (OfficeOrder) object;
+                return getStringKey(o.getOfficeOrderId());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), OfficeOrder.class.getName()});
+                return null;
+            }
+        }
+
+    }
+
+    public List<Part> getPartList() {
+        return partList;
+    }
+
+    public void setPartList(List<Part> partList) {
+        this.partList = partList;
+    }
+
+    public List<ServicePart> getServiceParts() {
+        return serviceParts;
+    }
+
+    public void setServicePart(List<ServicePart> serviceParts) {
+        this.serviceParts = serviceParts;
+    }
+
+    public List<Device> getSelectedDevice() {
+        return selectedDevice;
+//       return selectedDevice = deviceController.getDeviceByCustomerId(customerId);
+    }
+
+    public void setSelectedDevice(List<Device> selectedDevice) {
+        this.selectedDevice = selectedDevice;
+    }
+
+    public List<Customer> getSelectedCustomer() {
+        if (selectedCustomer == null) {
+            selectedCustomer = new ArrayList();
+            selectedCustomer = customerFacade.findAll();
+        }
+        return selectedCustomer;
+    }
+
+    public void setSelectedCustomer(List<Customer> selectedCustomer) {
+        this.selectedCustomer = selectedCustomer;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public Integer getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(Integer deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public List<Part> getPartsForCreate() {
+        return partsForCreate;
+    }
+
+    public void setPartsForCreate(List<Part> partsForCreate) {
+        this.partsForCreate = partsForCreate;
+    }
+
+    public Part getPartForCreate() {
+        return partForCreate;
+    }
+
+    public void setPartForCreate(Part partForCreate) {
+        this.partForCreate = partForCreate;
+    }
+
+    public ServicePart getServicePartForCreate() {
+        return servicePartForCreate;
+    }
+
+    public void setServicePartForCreate(ServicePart servicePartForCreate) {
+        this.servicePartForCreate = servicePartForCreate;
+    }
+
+    public List<Service> getServiceItems() {
+        return serviceItems;
+    }
+
+    public void setServiceItems(List<Service> serviceItems) {
+        this.serviceItems = serviceItems;
+    }
+
+    public Service getSelectedService() {
+        return selectedService;
+    }
+
+    public void setSelectedService(Service selectedService) {
+        this.selectedService = selectedService;
+    }
+
+    public List<ServicesList> getServicesList() {
+        return servicesList;
+    }
+
+    public void setServicesList(List<ServicesList> servicesList) {
+        this.servicesList = servicesList;
+    }
+
+    public ServicesList getServiceForCreate() {
+        return serviceForCreate;
+    }
+
+    public void setServiceForCreate(ServicesList serviceForCreate) {
+        this.serviceForCreate = serviceForCreate;
+    }
+
+    public BigDecimal getPartsTotalPrice() {
+        return partsTotalPrice;
+    }
+
+    public void setPartsTotalPrice(BigDecimal partsTotalPrice) {
+        this.partsTotalPrice = partsTotalPrice;
+    }
+
+    public BigDecimal getServicesTotalPrice() {
+        return servicesTotalPrice;
+    }
+
+    public void setServicesTotalPrice(BigDecimal servicesTotalPrice) {
+        this.servicesTotalPrice = servicesTotalPrice;
+    }
+
+    public HttpSession getSession() {
+        return session;
+    }
+
+    public void setSession(HttpSession session) {
+        this.session = session;
+    }
+
+    public List<Employee> getServiceEmployeeList() {
+        return serviceEmployeeList;
+    }
+
+    public void setServiceEmployeeList(List<Employee> serviceEmployeeList) {
+        this.serviceEmployeeList = serviceEmployeeList;
+    }
+
+    public List<OfficeOrder> getFilteredOrders() {
+        return filteredOrders;
+    }
+
+    public void setFilteredOrders(List<OfficeOrder> filteredOrders) {
+        this.filteredOrders = filteredOrders;
+    }
+
+    public List<OfficeOrder> getActiveOrders() {
+        session = SessionUtils.getSession();
+        Integer serviceEmployeeId = (Integer) session.getAttribute("employeeId");
+        activeOrders = ejbFacade.findOrderByEmployeeId(serviceEmployeeId);
+        System.out.println("ActiveOrder in OfficeOrders:" + activeOrders.size());
+        System.out.println("ActiveOrder EmployeeId:" + serviceEmployeeId);
+        return activeOrders;
+    }
+}

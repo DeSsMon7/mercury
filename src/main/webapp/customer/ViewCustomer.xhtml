@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CustomerViewDlg" widgetVar="CustomerViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msgs_EN.ViewCustomerTitle}">
+            <h:form id="CustomerViewForm"  style="width: 750px;" class="custom-panel-grp" >
+                <p:dataTable id="datalist" var="customerItem" editable="true" widgetVar="customersTable" value="#{customerController.items}"
+                             scrollable="true"   scrollHeight="370" filteredValue="#{customerController.filteredCustomers}" >
+                    <f:facet name="header" >
+                        <p:outputPanel style="text-align: end !important">
+                            <h:outputText value="Search all fields:" />
+                            <p:inputText id="globalFilter" onkeyup="PF('customersTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:column  headerText="Id" filterBy="#{customerItem.customerId}"  filterMatchMode="contains" >
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{customerItem.customerId}"/></f:facet>
+                            <f:facet name="input"><p:inputText value="#{customerItem.customerId}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Firstname" filterBy="#{customerItem.customerFirstname}" filterMatchMode="contains">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{customerItem.customerFirstname}"/></f:facet>
+                            <f:facet name="input"><p:inputText value="#{customerItem.customerFirstname}"/></f:facet>          
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Surname" filterBy="#{customerItem.customerSurname}" filterMatchMode="contains">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{customerItem.customerSurname}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{customerItem.customerSurname}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Email" filterBy="#{customerItem.customerEmail} " filterMatchMode="contains">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{customerItem.customerEmail}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{customerItem.customerEmail}" style="width:100%" /></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column  headerText="Edit" style="width:20px">
+                        <p:rowEditor editTitle="Edit" saveTitle="Save" cancelTitle="Cancel"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

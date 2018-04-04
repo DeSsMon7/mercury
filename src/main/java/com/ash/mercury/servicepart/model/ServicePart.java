@@ -1,0 +1,136 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.ash.mercury.servicepart.model;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+
+/**
+ *
+ * @author Timmy
+ */
+@Entity
+@Table(name = "service_parts")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "ServicePart.findAll", query = "SELECT s FROM ServicePart s")
+    , @NamedQuery(name = "ServicePart.findByServicePartId", query = "SELECT s FROM ServicePart s WHERE s.servicePartId = :servicePartId")
+    , @NamedQuery(name = "ServicePart.findByPartId", query = "SELECT s FROM ServicePart s WHERE s.partId = :partId")
+    , @NamedQuery(name = "ServicePart.findByPartQuantity", query = "SELECT s FROM ServicePart s WHERE s.partQuantity = :partQuantity")
+    , @NamedQuery(name = "ServicePart.findByPartUnitPrice", query = "SELECT s FROM ServicePart s WHERE s.partUnitPrice = :partUnitPrice")
+    , @NamedQuery(name = "ServicePart.findByPartTotalPrice", query = "SELECT s FROM ServicePart s WHERE s.partTotalPrice = :partTotalPrice")
+    , @NamedQuery(name = "ServicePart.findByOfficeOrderId", query = "SELECT s FROM ServicePart s WHERE s.officeOrderId = :officeOrderId")})
+public class ServicePart implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "service_part_id")
+    private Integer servicePartId;
+    @Column(name = "part_id")
+    private Integer partId;
+    @Column(name = "part_quantity")
+    private Integer partQuantity;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "part_unit_price")
+    private BigDecimal partUnitPrice;
+    @Column(name = "part_total_price")
+    private BigDecimal partTotalPrice;
+    @Column(name = "office_order_id")
+    private Integer officeOrderId;
+
+    public ServicePart() {
+    }
+
+    public ServicePart(Integer servicePartId) {
+        this.servicePartId = servicePartId;
+    }
+
+    public Integer getServicePartId() {
+        return servicePartId;
+    }
+
+    public void setServicePartId(Integer servicePartId) {
+        this.servicePartId = servicePartId;
+    }
+
+    public Integer getPartId() {
+        return partId;
+    }
+
+    public void setPartId(Integer partId) {
+        this.partId = partId;
+    }
+
+    public Integer getPartQuantity() {
+        return partQuantity;
+    }
+
+    public void setPartQuantity(Integer partQuantity) {
+        this.partQuantity = partQuantity;
+    }
+
+    public BigDecimal getPartUnitPrice() {
+        return partUnitPrice;
+    }
+
+    public void setPartUnitPrice(BigDecimal partUnitPrice) {
+        this.partUnitPrice = partUnitPrice;
+    }
+
+    public BigDecimal getPartTotalPrice() {
+        return partTotalPrice;
+    }
+
+    public void setPartTotalPrice(BigDecimal partTotalPrice) {
+        this.partTotalPrice = partTotalPrice;
+    }
+
+    public Integer getOfficeOrderId() {
+        return officeOrderId;
+    }
+
+    public void setOfficeOrderId(Integer officeOrderId) {
+        this.officeOrderId = officeOrderId;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (servicePartId != null ? servicePartId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof ServicePart)) {
+            return false;
+        }
+        ServicePart other = (ServicePart) object;
+        if ((this.servicePartId == null && other.servicePartId != null) || (this.servicePartId != null && !this.servicePartId.equals(other.servicePartId))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.ash.mercury.servicepart.model.ServicePart[ servicePartId=" + servicePartId + " ]";
+    }
+    
+}

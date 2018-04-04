@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EmployeeViewDlg" widgetVar="EmployeeViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msgs_EN.ViewEmployeeTitle}">
+            <h:form id="EmployeeViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{employeeController.selected != null}">
+                        <h:outputText value="#{msgs_EN.ViewEmployeeLabel_employeeId}"/>
+                        <h:outputText value="#{employeeController.selected.employeeId}" title="#{msgs_EN.ViewEmployeeTitle_employeeId}"/>
+                        <h:outputText value="#{msgs_EN.ViewEmployeeLabel_employeeFirstname}"/>
+                        <h:outputText value="#{employeeController.selected.employeeFirstname}" title="#{msgs_EN.ViewEmployeeTitle_employeeFirstname}"/>
+                        <h:outputText value="#{msgs_EN.ViewEmployeeLabel_employeeSurname}"/>
+                        <h:outputText value="#{employeeController.selected.employeeSurname}" title="#{msgs_EN.ViewEmployeeTitle_employeeSurname}"/>
+                        <h:outputText value="#{msgs_EN.ViewEmployeeLabel_employeeLogin}"/>
+                        <h:outputText value="#{employeeController.selected.employeeLogin}" title="#{msgs_EN.ViewEmployeeTitle_employeeLogin}"/>
+                        <h:outputText value="#{msgs_EN.ViewEmployeeLabel_employeePassword}"/>
+                        <h:outputText value="#{employeeController.selected.employeePassword}" title="#{msgs_EN.ViewEmployeeTitle_employeePassword}"/>
+                        <h:outputText value="#{msgs_EN.ViewEmployeeLabel_employeeEmail}"/>
+                        <h:outputText value="#{employeeController.selected.employeeEmail}" title="#{msgs_EN.ViewEmployeeTitle_employeeEmail}"/>
+                        <h:outputText value="#{msgs_EN.ViewEmployeeLabel_employeeRole}"/>
+                        <h:outputText value="#{employeeController.selected.employeeRole}" title="#{msgs_EN.ViewEmployeeTitle_employeeRole}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{msgs_EN.Close}" onclick="EmployeeViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

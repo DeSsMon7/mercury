@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="loginTemplate.xhtml">
+
+        <ui:define name="body" >            
+            <div style="position: fixed;top: 30%;left: 50%;transform: translate(-50%, -50%);">
+                <span><span style="font-size: 50px;font-family: monospace">mercury</span></span>
+                <p:separator/>
+            </div>
+            <div style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -95%);">
+                <h:form id="loginForm">
+                    <p:panel class="ui-panel" >
+                        <p:panelGrid class="ui-panelgrid-blank" columns="2"  style="margin-right: 12% !important">
+                            <p:outputLabel for="username" class="fa fa-user fa-2x" style="float: right; width: 20% "/>
+                            <p:inputText placeholder="Login" id="username" value="#{login.employeeLogin}" required="true" requiredMessage="Моля въведете потребителско име"/>
+                            <h:outputLabel  for="pwd1" class="fa fa-lock fa-2x" style="float: right; width: 20% " />
+                            <p:password placeholder="Password" id="pwd1" value="#{login.employeePassword}"  label="Password" required="true"  requiredMessage="Моля въведете парола"/>
+                            <br />
+                            <p:commandButton id="loginButton" icon="ui-icon-circle-check" value="Log" action="#{login.validateUsernamePassword}" style="float: right" update=":growl" />
+                        </p:panelGrid>
+                    </p:panel>
+                </h:form>
+            </div>
+        </ui:define>
+    </ui:composition>
+
+</html>

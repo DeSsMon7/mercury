@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <!--    <ui:composition template="indexTemplate.xhtml">-->
+    <!--    <ui:composition template="officeTemplate.xhtml">-->
+    <ui:composition template="#{login.employeeRole == 'service' ? 'serviceTemplate.xhtml' : (login.employeeRole == 'admin' ? 'adminTemplate.xhtml' : 'officeTemplate.xhtml')}">
+
+
+        <ui:define name="mainMenu">
+
+        </ui:define>
+
+
+
+        <ui:define name="body">   
+            <div>div </div>
+
+        </ui:define>
+
+        <ui:define name="leftMenu">
+            <h:form id="leftMenuForm" >
+                <p:slideMenu style="width:162px;border-style: hidden">
+                    <p:submenu icon="ui-icon-person" label="Customers" >
+                        <p:menuitem id="createCustomer" value="Add Customer" icon="ui-icon-plus"  action="#{customerController.prepareCreate(event)}"  oncomplete="PF('CustomerCreateDialog').show()"/>
+                        <p:menuitem id="viewCustomer" value="View all" icon="ui-icon-search" oncomplete="PF('CustomerViewDialog').show()"/>
+                        <p:menuitem value="Employee" outcome="/employee/List" />
+                    </p:submenu>
+                    <p:separator/>
+                    <p:submenu icon="ui-icon-calculator" label="Device" >
+                        <p:menuitem id="createDevice" value="Add Device" icon="ui-icon-plus" action="#{deviceController.prepareCreate(event)}" oncomplete="PF('DeviceCreateDialog').show()" />
+                        <p:menuitem value="Active orders" outcome="/device/List"/>
+                        <p:menuitem value="View all" outcome="/employee/List" />
+                    </p:submenu>
+                    <p:submenu label="Orders" >
+                        <p:menuitem value="New order"  outcome="/officeOrder/List.xhtml"/>
+                        <p:menuitem value="Services"  outcome="/service/List.xhtml"/>
+                        <p:menuitem value="Service Part" outcome="/servicePart/List.xhtml"/>
+                        <p:menuitem value="Order Services List " outcome="/servicesList/List.xhtml" />
+                    </p:submenu>
+                </p:slideMenu>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

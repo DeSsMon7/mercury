@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ServicePartCreateDlg" widgetVar="ServicePartCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msgs_EN.CreateServicePartTitle}">
+            <h:form id="ServicePartCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{servicePartController.selected != null}">
+                        <p:outputLabel value="#{msgs_EN.CreateServicePartLabel_servicePartId}" for="servicePartId" />
+                        <p:inputText id="servicePartId" value="#{servicePartController.selected.servicePartId}" title="#{msgs_EN.CreateServicePartTitle_servicePartId}" required="true" requiredMessage="#{msgs_EN.CreateServicePartRequiredMessage_servicePartId}"/>
+                        <p:outputLabel value="#{msgs_EN.CreateServicePartLabel_partId}" for="partId" />
+                        <p:inputText id="partId" value="#{servicePartController.selected.partId}" title="#{msgs_EN.CreateServicePartTitle_partId}" />
+                        <p:outputLabel value="#{msgs_EN.CreateServicePartLabel_partQuantity}" for="partQuantity" />
+                        <p:inputText id="partQuantity" value="#{servicePartController.selected.partQuantity}" title="#{msgs_EN.CreateServicePartTitle_partQuantity}" />
+                        <p:outputLabel value="#{msgs_EN.CreateServicePartLabel_partUnitPrice}" for="partUnitPrice" />
+                        <p:inputText id="partUnitPrice" value="#{servicePartController.selected.partUnitPrice}" title="#{msgs_EN.CreateServicePartTitle_partUnitPrice}" />
+                        <p:outputLabel value="#{msgs_EN.CreateServicePartLabel_partTotalPrice}" for="partTotalPrice" />
+                        <p:inputText id="partTotalPrice" value="#{servicePartController.selected.partTotalPrice}" title="#{msgs_EN.CreateServicePartTitle_partTotalPrice}" />
+                        <p:outputLabel value="#{msgs_EN.CreateServicePartLabel_officeOrderId}" for="officeOrderId" />
+                        <p:inputText id="officeOrderId" value="#{servicePartController.selected.officeOrderId}" title="#{msgs_EN.CreateServicePartTitle_officeOrderId}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{servicePartController.create}" value="#{msgs_EN.Save}" update="display,:ServicePartListForm:datalist,:growl" oncomplete="handleSubmit(args,'ServicePartCreateDialog');"/>
+                    <p:commandButton value="#{msgs_EN.Cancel}" onclick="ServicePartCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

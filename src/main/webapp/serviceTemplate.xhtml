@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+        <title><ui:insert name="title">#{msgs_EN.AppName}</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputStylesheet library="css" name="gridcss.css"/>
+        <h:outputStylesheet library="font-awesome" name="css/font-awesome.css"/>
+        <h:outputStylesheet library="font-awesome" name="css/font-awesome.min.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="message" life="3000" />
+
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north" size="74" header="#{msgs_EN.AppName}">
+                <h:form  id="mainMenuForm">
+                    <p:menubar>
+                        <p:menuitem value="#{msgs_EN.Home}" outcome="/index" icon="ui-icon-home"/>
+                        <p:submenu label="Greetings,   #{login.employeeLogin}" icon="ui-icon-person" style="float: right">
+                            <p:menuitem value="Customer" outcome="/customer/List.xhtml" />
+                            <p:menuitem value="Device" outcome="/device/List.xhtml" />
+                            <p:menuitem value="Orders" outcome="/officeOrder/List.xhtml" />
+                            <p:menuitem value="Invoices" outcome="/invoice/List.xhtml" />
+                            <p:separator/>
+                            <p:menuitem icon="ui-icon-power" value="Logout" outcome="/login.xhtml" actionListener="#{login.logout(e)}" />
+                        </p:submenu>
+                    </p:menubar> 
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="40">
+                <h:outputText style="font-family: string;font-size: 15px; float: right;margin-top: 5px;margin-right: 10px;" value="mercury© 2017">
+                </h:outputText> 
+
+                <span style="font-family: fantasy; font-size: 18px;padding-left: 5px">
+                    <a href="http://ashcode.tk" style="color: lawngreen"> bbm™</a>
+                </span>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                <h:form id="leftMenuForm" >
+                    <p:slideMenu style="width:162px;border-style: hidden">
+                        <p:submenu label="My Service Orders"  icon="fa fa-tasks fa-lg" >
+                            <p:menuitem id="createCustomer" value="Active Orders" icon="fa fa-plus fa-lg" outcome="/officeOrder/ServiceOrder.xhtml"/>
+                            <p:menuitem id="viewCustomer" value="View all" icon="ui-icon-search" oncomplete="PF('CustomerViewDialog').show()"/>
+                            <p:menuitem value="Employee" outcome="/employee/List" />
+                        </p:submenu>
+                        <p:separator/>
+                        <p:submenu  label="Device" icon="ui-icon-calculator"  >
+                            <p:menuitem id="createDevice" value="Add Device" icon="ui-icon-plus" action="#{deviceController.prepareCreate(event)}" oncomplete="PF('DeviceCreateDialog').show()" />
+                            <p:menuitem value="Active orders" outcome="/device/List"/>
+                            <p:menuitem value="View all" outcome="/employee/List" />
+                        </p:submenu>
+                        <p:submenu label="Orders" >
+                            <p:menuitem value="New order"  outcome="/officeOrder/List.xhtml"/>
+                            <p:menuitem value="Services"  outcome="/service/List.xhtml"/>
+                            <p:menuitem value="Service Part" outcome="/servicePart/List.xhtml"/>
+                            <p:menuitem value="Order Services List " outcome="/servicesList/List.xhtml" />
+                        </p:submenu>
+                        <p:submenu label="Invoices" >
+                            <p:menuitem value="Create Invoice"  outcome="/officeOrder/List.xhtml"/>
+                            <p:menuitem value="Edit Invoice" outcome="/servicePart/List.xhtml"/>
+                            <p:menuitem value="View Invoices"  outcome="/service/List.xhtml"/>
+                        </p:submenu>
+                    </p:slideMenu>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <div class="ui-g"  style="margin-left: 1%">
+                    <div class="ui-g-6 ui-g-nopad" style="float: right">
+                        <h:form id="OfficeOrderPendingForm">
+                            <p:dataTable id="pendingOrderList" style="width: 98% !important; text-align: center;" scrollRows="5" scrollable="true" liveScroll="true" scrollHeight="200"
+                                         var="pendingItems" 
+                                         value="#{officeOrderController.pendingOrders}">
+                                <f:facet name="header">
+                                    Pending Orders
+                                </f:facet>
+                                <p:column headerText="id" width="50">
+                                    <h:outputText value="#{pendingItems.officeOrderId}" />
+                                </p:column>
+                                <p:column headerText="Customer" width="110">
+                                    <h:outputText value="#{pendingItems.customerId.customerFirstname} #{pendingItems.customerId.customerSurname}" />
+                                </p:column>
+                                <p:column headerText="Device" width="100">
+                                    <h:outputText value="#{pendingItems.deviceId.deviceBrand} #{pendingItems.deviceId.deviceModel}" />
+                                </p:column>
+                                <p:column headerText="Description">
+                                    <h:outputText value="#{pendingItems.officeOrderInfo}" />
+                                </p:column>
+                                <p:column headerText="Date" width="55">
+                                    <h:outputText value="#{pendingItems.officeOrderDate}" >
+                                        <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Status" width="70">
+                                    <h:outputText value="#{pendingItems.officeOrderServiceStatus}" />
+                                </p:column>
+                                <p:column style="width:32px;">
+                                    <p:commandButton action="#{officeOrderController.assignOrder}"
+                                                     update=":OfficeOrderPendingForm:pendingOrderList ,:OfficeOrderAssignForm:assignedOrderList" 
+                                                     icon="ui-icon-search" title="View">
+                                        <f:setPropertyActionListener value="#{pendingItems}" target="#{officeOrderController.selected}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-6 ui-g-nopad" style="float: right">
+                        <h:form id="OfficeOrderAssignForm"> 
+                            <p:dataTable id="assignedOrderList" style="width: 98% !important; text-align: center;" scrollRows="6" scrollable="true" liveScroll="true" scrollHeight="150"
+                                         var="assignedItems" 
+                                         value="#{officeOrderController.assignedOrders}">
+                                <f:facet name="header">
+                                    Assigned Orders
+                                </f:facet>
+                                <p:column headerText="Order Description">
+                                    <h:outputText value="#{assignedItems.customerId.customerFirstname}" />
+                                </p:column>
+                                <p:column headerText="Device" width="70">
+                                    <h:outputText value="#{assignedItems.deviceId}" />
+                                </p:column>
+                                <p:column headerText="Order Description">
+                                    <h:outputText value="#{assignedItems.officeOrderInfo}" />
+                                </p:column>
+                                <p:column headerText="Status">
+                                    <h:outputText value="#{assignedItems.officeOrderServiceStatus}" />
+                                </p:column>
+                                <p:column headerText="Service Date">
+                                    <h:outputText value="#{assignedItems.officeOrderServiceDate}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:form>
+                    </div>
+                </div>
+            </p:layoutUnit>
+
+        </p:layout>
+
+    </h:body>
+
+</html>
+
