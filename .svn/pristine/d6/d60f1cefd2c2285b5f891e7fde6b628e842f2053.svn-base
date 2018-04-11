@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="InvoiceViewDlg" widgetVar="InvoiceViewDialog" modal="true" resizable="true" appendTo="@(body)" 
+                  header="#{msgs_EN.ViewOfficeOrderTitle}">
+            <h:form id="InvoiceViewForm">
+                <h:panelGroup id="display" class="custom-panel-grp">
+                    <p:dataTable id="datalist" var="invoiceItem" widgetVar="invoiceTable" editable="true" value="#{invoiceController.items}"
+                                 scrollable="true"   scrollHeight="370" filteredValue="#{invoiceController.filteredInvoices}" >
+                        <f:facet name="header" >
+                            <p:outputPanel style="text-align: end !important">
+                                <h:outputText value="Search all fields:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('invoiceTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                            </p:outputPanel>
+                        </f:facet>
+                        <p:column headerText="Id" width="10" filterBy="#{invoiceItem.invoiceId}" filterMatchMode="contains">
+                            <p:cellEditor>
+                                <f:facet name="output" ><h:outputText style="width: 30px !important" value="#{invoiceItem.invoiceId}"/></f:facet>
+                                <f:facet name="input"><p:inputText  style="width: 40px !important" id="modelInput" value="#{invoiceItem.invoiceId}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Date" width="40">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{invoiceItem.invoiceDate}"><f:convertDateTime pattern="dd/MM/yyyy"/> </h:outputText></f:facet>
+                                <f:facet name="input"><p:calendar id="invoiceDate" pattern="dd/MM/yyyy" 
+                                                                  value="#{invoiceController.selected.invoiceDate}" 
+                                                                  showOn="button"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Description" width="80" >
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{invoiceItem.officeOrderId.officeOrderInfo}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{invoiceItem.officeOrderId.officeOrderInfo}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Total Price" width="30" >
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{invoiceItem.invoicePrice}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{invoiceItem.invoicePrice}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Status" width="50" filterBy="#{invoiceItem.officeOrderId.officeOrderServiceStatus}" filterMatchMode="contains">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{invoiceItem.officeOrderId.officeOrderServiceStatus}"/></f:facet>
+                                <f:facet name="input"><p:inputText value="#{invoiceItem.officeOrderId.officeOrderServiceStatus}"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Customer" width="70" filterBy="#{invoiceItem.customerId.customerSurname}" filterMatchMode="contains">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText  value="#{invoiceItem.customerId.customerFirstname} #{invoiceItem.customerId.customerSurname}" /></f:facet>
+                                <f:facet name="input">           
+                                    <p:selectOneMenu  id="customerId" value="#{invoiceController.selected.customerId}">
+                                        <f:selectItem itemValue="#{customerIdItem}" itemLabel="Select Customer"/>
+                                        <f:selectItems value="#{officeOrderController.selectedCustomer}"
+                                                       var="customerIdItem"
+                                                       itemValue="#{customerIdItem}"
+                                                       itemLabel="#{customerIdItem.customerFirstname} #{customerIdItem.customerSurname}" />
+                                        <p:ajax listener="#{officeOrderController.initDevices}" update="deviceId"/>
+                                    </p:selectOneMenu></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Service Order" width="70" filterBy="#{invoiceItem.officeOrderId.deviceId.deviceModel}" >
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{invoiceItem.officeOrderId.officeOrderInfo} #{invoiceItem.officeOrderId.deviceId.deviceType} "  /></f:facet>
+                                <f:facet name="input"> 
+                                    <p:selectOneMenu id="deviceId" value="#{invoiceController.selected.officeOrderId.deviceId}" >
+                                        <f:selectItem itemLabel="Select Device" />
+                                        <f:selectItems value="#{officeOrderController.selectedDevice}"
+                                                       var="officeOrderIdItem"
+                                                       itemValue="#{officeOrderIdItem}"
+                                                       itemLabel="#{officeOrderIdItem.deviceType} #{officeOrderIdItem.deviceModel}"/>
+                                    </p:selectOneMenu></f:facet>
+                            </p:cellEditor>
+                        </p:column >
+                        <p:column  width="10">
+                            <p:rowEditor editTitle="Edit" saveTitle="Save" cancelTitle="Cancel"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
