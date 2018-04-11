@@ -44,7 +44,7 @@
                 <h:form id="leftMenuForm" >
                     <p:slideMenu style="width:162px;border-style: hidden">
                         <p:submenu label="Customers" icon="fa fa-address-book-o fa-lg" >
-                            <p:menuitem id="createCustomer" value="New Customer" icon="fa fa-user-plus fa-lg"  actionListener="#{customerController.prepareCreate}"  oncomplete="PF('CustomerCreateDialog').show()"/>
+                            <p:menuitem id="createCustomer" value="New Customer" icon="fa fa-user-plus fa-lg"  actionListener="#{customerController.prepareCreate(event)}"  oncomplete="PF('CustomerCreateDialog').show()"/>
                             <p:menuitem id="viewCustomer" value="Customer Details" icon="fa fa-address-card fa-lg"  oncomplete="PF('CustomerViewDialog').show()"/>
                             <p:menuitem value="Employee" outcome="/employee/List" />
                         </p:submenu>
@@ -55,13 +55,13 @@
                             <p:menuitem value="View all" outcome="/employee/List" />
                         </p:submenu>
                         <p:submenu label="Orders" icon="fa fa-list-alt fa-lg" >
-                            <p:menuitem value="New Service Order"  icon="fa fa-plus fa-lg" actionListener="#{officeOrderController.prepareCreate}" oncomplete="PF('OfficeOrderCreateDialog').show()"/>
+                            <p:menuitem value="New Service Order"  icon="fa fa-plus fa-lg" actionListener="#{officeOrderController.prepareCreate(event)}" oncomplete="PF('OfficeOrderCreateDialog').show()"/>
                             <p:menuitem value="All Orders"  icon="fa fa-inbox fa-lg" oncomplete="PF('OfficeOrderViewDialog').show()" />
                             <p:menuitem value="Active orders" outcome="/servicePart/List.xhtml"/>
                             <p:menuitem value="Order Services List " outcome="/servicesList/List.xhtml" />
                         </p:submenu>
                         <p:submenu label="Invoices" icon="fa fa-file-text-o fa-lg">
-                            <p:menuitem value="Create Invoice" icon="fa fa-file-o fa-lg"  actionListener="#{invoiceController.prepareCreate}" oncomplete="PF('InvoiceCreateDialog').show()"/>
+                            <p:menuitem value="Create Invoice" icon="fa fa-file-o fa-lg"  actionListener="#{invoiceController.prepareCreate(event)}" oncomplete="PF('InvoiceCreateDialog').show()"/>
                             <p:menuitem value="Edit Invoice"  icon="fa fa-pencil fa-lg" oncomplete="PF('InvoiceViewDialog').show()"/>
                             <p:menuitem value="Print Invoice"  icon="fa fa-print fa-lg" outcome="/service/List.xhtml"/>
                         </p:submenu>

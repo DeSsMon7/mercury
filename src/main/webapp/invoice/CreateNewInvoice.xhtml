@@ -37,9 +37,9 @@
                                            itemValue="#{employeeIdItem}"
                                            itemLabel="#{employeeIdItem.employeeFirstname} #{employeeIdItem.employeeSurname}"/>
                         </p:selectOneMenu>
-                        <h:outputText id="invoicePrice" value="#{invoiceController.selected.invoicePrice}" title="#{msgs_EN.CreateInvoiceTitle_invoicePrice}" />
+                        <h:outputText   id="invoicePrice" value="Total: #{invoiceController.selected.invoicePrice} VAT included" title="#{msgs_EN.CreateInvoiceTitle_invoicePrice}" />
                     </p:panelGrid>
-                    <p:commandButton class="ui-g-5 create-invoice-price " icon="fa fa-save fa-fw" actionListener="#{invoiceController.create}" value="#{msgs_EN.Save}"  oncomplete="handleSubmit(args,'InvoiceCreateDialog');"/>
+                    <p:commandButton class="ui-g-5 create-invoice-price " icon="fa fa-save fa-fw" actionListener="#{invoiceController.create}" value="#{msgs_EN.Save}"  update=":message" oncomplete="handleSubmit(args,'InvoiceCreateDialog');"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

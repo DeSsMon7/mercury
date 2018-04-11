@@ -59,23 +59,24 @@
                                 <f:facet name="input">           
                                     <p:selectOneMenu  id="customerId" value="#{invoiceController.selected.customerId}">
                                         <f:selectItem itemValue="#{customerIdItem}" itemLabel="Select Customer"/>
-                                        <f:selectItems value="#{customerController.itemsAvailableSelectOne}"
+                                        <f:selectItems value="#{officeOrderController.selectedCustomer}"
                                                        var="customerIdItem"
                                                        itemValue="#{customerIdItem}"
                                                        itemLabel="#{customerIdItem.customerFirstname} #{customerIdItem.customerSurname}" />
+                                        <p:ajax listener="#{officeOrderController.initDevices}" update="deviceId"/>
                                     </p:selectOneMenu></f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Service Order" width="70" filterBy="#{invoiceItem.officeOrderId}" >
+                        <p:column headerText="Service Order" width="70" filterBy="#{invoiceItem.officeOrderId.deviceId.deviceModel}" >
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{invoiceItem.officeOrderId.officeOrderInfo} #{invoiceItem.officeOrderId.deviceId.deviceType} "  /></f:facet>
                                 <f:facet name="input"> 
-                                    <p:selectOneMenu id="officeOrderId" value="#{invoiceItem.officeOrderId.deviceId}" >
+                                    <p:selectOneMenu id="deviceId" value="#{invoiceController.selected.officeOrderId.deviceId}" >
                                         <f:selectItem itemLabel="Select Device" />
-                                        <f:selectItems value="#{officeOrderController.itemsAvailableSelectOne}"
+                                        <f:selectItems value="#{officeOrderController.selectedDevice}"
                                                        var="officeOrderIdItem"
                                                        itemValue="#{officeOrderIdItem}"
-                                                       itemLabel="#{officeOrderIdItem.officeOrderServiceStatus} #{officeOrderIdItem.deviceId.deviceType}"/>
+                                                       itemLabel="#{officeOrderIdItem.deviceType} #{officeOrderIdItem.deviceModel}"/>
                                     </p:selectOneMenu></f:facet>
                             </p:cellEditor>
                         </p:column >

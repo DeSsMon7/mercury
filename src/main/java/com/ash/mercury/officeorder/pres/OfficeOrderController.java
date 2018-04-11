@@ -36,6 +36,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -43,6 +44,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import org.primefaces.event.RowEditEvent;
 
 @Named("officeOrderController")
 @SessionScoped
@@ -187,7 +189,7 @@ public class OfficeOrderController implements Serializable {
         return ejbFacade;
     }
 
-    public OfficeOrder prepareCreate() {
+    public OfficeOrder prepareCreate(ActionEvent event) {
         selected = new OfficeOrder();
         initializeEmbeddableKey();
         return selected;
@@ -296,6 +298,18 @@ public class OfficeOrderController implements Serializable {
 
         System.out.println("Selected order id: " + selected.getOfficeOrderId());
 
+    }
+    
+       public void onRowEdit(RowEditEvent event) {
+          
+        selectedCustomer.get(0).getCustomerId();
+        selectedDevice.get(0).getDeviceId();
+        selected.setOfficeOrderId(selected.getOfficeOrderId());
+        selected.setCustomerId(selectedCustomer.get(0));
+        selected.setDeviceId(selectedDevice.get(0));
+        ejbFacade.editOfficeOrder(selected);
+        FacesMessage msg = new FacesMessage("OfficeOrder Edited", ((OfficeOrder) event.getObject()).getOfficeOrderId().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public List<OfficeOrder> getItems() {

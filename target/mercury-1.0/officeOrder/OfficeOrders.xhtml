@@ -20,6 +20,7 @@
                                 <p:inputText id="globalFilter" onkeyup="PF('officeOrderTable').filter()" style="width:150px" placeholder="Enter keyword"/>
                             </p:outputPanel>
                         </f:facet>
+                        <p:ajax event="rowEdit" listener="#{officeOrderController.onRowEdit}" update=":OfficeOrderViewForm:datalist, :message" />
                         <p:column headerText="Id" width="10" filterBy="#{officeOrderItem.officeOrderId}" filterMatchMode="contains">
                             <p:cellEditor>
                                 <f:facet name="output" ><h:outputText style="width: 30px !important" value="#{officeOrderItem.officeOrderId}"/></f:facet>
