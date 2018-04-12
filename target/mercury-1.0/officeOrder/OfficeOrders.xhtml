@@ -21,7 +21,7 @@
                             </p:outputPanel>
                         </f:facet>
                         <p:ajax event="rowEdit" listener="#{officeOrderController.onRowEdit}" update=":OfficeOrderViewForm:datalist, :message" />
-                        <p:column headerText="Id" width="10" filterBy="#{officeOrderItem.officeOrderId}" filterMatchMode="contains">
+                        <p:column headerText="Id" id="officeOrderId" width="10" filterBy="#{officeOrderItem.officeOrderId}" filterMatchMode="contains">
                             <p:cellEditor>
                                 <f:facet name="output" ><h:outputText style="width: 30px !important" value="#{officeOrderItem.officeOrderId}"/></f:facet>
                                 <f:facet name="input"><p:inputText  style="width: 40px !important" id="modelInput" value="#{officeOrderItem.officeOrderId}" /></f:facet>

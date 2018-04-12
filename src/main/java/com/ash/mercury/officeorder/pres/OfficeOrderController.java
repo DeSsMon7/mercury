@@ -299,17 +299,11 @@ public class OfficeOrderController implements Serializable {
         System.out.println("Selected order id: " + selected.getOfficeOrderId());
 
     }
-    
-       public void onRowEdit(RowEditEvent event) {
-          
-        selectedCustomer.get(0).getCustomerId();
-        selectedDevice.get(0).getDeviceId();
-        selected.setOfficeOrderId(selected.getOfficeOrderId());
-        selected.setCustomerId(selectedCustomer.get(0));
-        selected.setDeviceId(selectedDevice.get(0));
+
+    public void onRowEdit(RowEditEvent event) {
+        selected.setCustomerId(selected.getCustomerId());
+        selected.setDeviceId(selected.getDeviceId());
         ejbFacade.editOfficeOrder(selected);
-        FacesMessage msg = new FacesMessage("OfficeOrder Edited", ((OfficeOrder) event.getObject()).getOfficeOrderId().toString());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public List<OfficeOrder> getItems() {

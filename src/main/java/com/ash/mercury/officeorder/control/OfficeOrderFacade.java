@@ -70,8 +70,8 @@ public class OfficeOrderFacade extends AbstractFacade<OfficeOrder> {
     
       public void editOfficeOrder(OfficeOrder f) {
         em.createNativeQuery("UPDATE office_orders SET office_order_customer_id = ?1 , office_order_device_id = ?2 WHERE office_order_id = ?3")
-                .setParameter(1, f.getCustomerId())
-                .setParameter(2, f.getDeviceId())
+                .setParameter(1, f.getCustomerId().getCustomerId())
+                .setParameter(2, f.getDeviceId().getDeviceId())
                 .setParameter(3, f.getOfficeOrderId())
                 .executeUpdate();
     }
