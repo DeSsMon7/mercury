@@ -1,0 +1,91 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.ash.mercury.officeorder.control;
+
+import com.ash.mercury.officeorder.model.OfficeOrder;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+/**
+ *
+ * @author Timmy
+ */
+@Stateless
+public class OfficeOrderFacade extends AbstractFacade<OfficeOrder> {
+
+    @PersistenceContext(unitName = "com.ash_mercury_war_1.0-SNAPSHOTPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public OfficeOrderFacade() {
+        super(OfficeOrder.class);
+    }
+
+    public List findCustomerOrder(Integer id) {
+        return em.createQuery("SELECT o FROM OfficeOrder o WHERE o.customerId.customerId = :customerId")
+                .setParameter("customerId", id)
+                .getResultList();
+    }
+
+    public List findOfficeOrderSum(Integer id) {
+        List result = (List) em.createQuery("SELECT o.officeOrderSum FROM OfficeOrder o WHERE o.officeOrderId = :officeOrderId")
+                .setParameter("officeOrderId", id)
+                .setMaxResults(1)
+                .getResultList();
+        return result;
+    }
+
+    public void updateOfficeOrder(OfficeOrder f) {
+        em.createNativeQuery("UPDATE office_orders SET office_order_sum = ?1 , office_order_service_status = ?2 WHERE office_order_id = ?3")
+                .setParameter(1, f.getOfficeOrderSum())
+                .setParameter(2, f.getOfficeOrderServiceStatus())
+                .setParameter(3, f.getOfficeOrderId())
+                .executeUpdate();
+    }
+
+    public void updateOfficeOrderInvoiceId(Integer invoiceId, Integer officeOrderId) {
+        em.createNativeQuery("UPDATE office_orders SET invoice_id =?1 WHERE office_order_id = ?2")
+                .setParameter(1, invoiceId)
+                .setParameter(2, officeOrderId)
+                .executeUpdate();
+    }
+
+    public void updateAssignOrder(OfficeOrder f) {
+        em.createNativeQuery("UPDATE office_orders SET office_order_service_employee_id = ?1 , office_order_service_status = ?2 WHERE office_order_id = ?3")
+                .setParameter(1, f.getServiceEmployeeId().getEmployeeId())
+                .setParameter(2, f.getOfficeOrderServiceStatus())
+                .setParameter(3, f.getOfficeOrderId())
+                .executeUpdate();
+    }
+    
+      public void editOfficeOrder(OfficeOrder f) {
+        em.createNativeQuery("UPDATE office_orders SET office_order_customer_id = ?1 , office_order_device_id = ?2 WHERE office_order_id = ?3")
+                .setParameter(1, f.getCustomerId().getCustomerId())
+                .setParameter(2, f.getDeviceId().getDeviceId())
+                .setParameter(3, f.getOfficeOrderId())
+                .executeUpdate();
+    }
+
+    public List findOrderByStatus(String status) {
+        return em.createQuery("SELECT o FROM OfficeOrder o WHERE o.officeOrderServiceStatus = :status")
+                .setParameter("status", status)
+                .getResultList();
+    }
+
+    public List findOrderByEmployeeId(Integer id) {
+        return em.createQuery("SELECT o FROM OfficeOrder o WHERE o.employeeId.employeeId = :employeeId ")
+                .setParameter("employeeId" , id)
+                .getResultList();
+    }
+    
+}
