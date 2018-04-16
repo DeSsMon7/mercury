@@ -20,13 +20,13 @@
                                 <p:inputText id="globalFilter" onkeyup="PF('invoiceTable').filter()" style="width:150px" placeholder="Enter keyword"/>
                             </p:outputPanel>
                         </f:facet>
-                        <p:column headerText="Id" width="10" filterBy="#{invoiceItem.invoiceId}" filterMatchMode="contains">
+                        <p:column headerText="Id" width="5" filterBy="#{invoiceItem.invoiceId}" filterMatchMode="contains">
                             <p:cellEditor>
                                 <f:facet name="output" ><h:outputText style="width: 30px !important" value="#{invoiceItem.invoiceId}"/></f:facet>
                                 <f:facet name="input"><p:inputText  style="width: 40px !important" id="modelInput" value="#{invoiceItem.invoiceId}" /></f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Date" width="40">
+                        <p:column headerText="Date" width="12">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{invoiceItem.invoiceDate}"><f:convertDateTime pattern="dd/MM/yyyy"/> </h:outputText></f:facet>
                                 <f:facet name="input"><p:calendar id="invoiceDate" pattern="dd/MM/yyyy" 
@@ -40,20 +40,20 @@
                                 <f:facet name="input"><p:inputText value="#{invoiceItem.officeOrderId.officeOrderInfo}" style="width:100%"/></f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Total Price" width="30" >
+                        <p:column headerText="Total Price" width="12" >
                             <p:cellEditor>
                                 <f:facet name="output"> <h:outputText value="#{invoiceItem.invoicePrice}" /></f:facet>
                                 <f:facet name="input"><p:inputText value="#{invoiceItem.invoicePrice}" /></f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Status" width="50" filterBy="#{invoiceItem.officeOrderId.officeOrderServiceStatus}" filterMatchMode="contains">
+                        <p:column headerText="Status" width="30" filterBy="#{invoiceItem.officeOrderId.officeOrderServiceStatus}" filterMatchMode="contains">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{invoiceItem.officeOrderId.officeOrderServiceStatus}"/></f:facet>
                                 <f:facet name="input"><p:inputText value="#{invoiceItem.officeOrderId.officeOrderServiceStatus}"/></f:facet>
                             </p:cellEditor>
                         </p:column>
 
-                        <p:column headerText="Customer" width="70" filterBy="#{invoiceItem.customerId.customerSurname}" filterMatchMode="contains">
+                        <p:column headerText="Customer" width="33" filterBy="#{invoiceItem.customerId.customerSurname}" filterMatchMode="contains">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText  value="#{invoiceItem.customerId.customerFirstname} #{invoiceItem.customerId.customerSurname}" /></f:facet>
                                 <f:facet name="input">           
@@ -67,7 +67,7 @@
                                     </p:selectOneMenu></f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Service Order" width="70" filterBy="#{invoiceItem.officeOrderId.deviceId.deviceModel}" >
+                        <p:column headerText="Service Order" width="40" filterBy="#{invoiceItem.officeOrderId.deviceId.deviceModel}" >
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{invoiceItem.officeOrderId.officeOrderInfo} #{invoiceItem.officeOrderId.deviceId.deviceType} "  /></f:facet>
                                 <f:facet name="input"> 
@@ -80,7 +80,7 @@
                                     </p:selectOneMenu></f:facet>
                             </p:cellEditor>
                         </p:column >
-                        <p:column  width="10">
+                        <p:column  width="3">
                             <p:rowEditor editTitle="Edit" saveTitle="Save" cancelTitle="Cancel"/>
                         </p:column>
                     </p:dataTable>
