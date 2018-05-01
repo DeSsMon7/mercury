@@ -109,7 +109,6 @@ public class OfficeOrderController implements Serializable {
     public void initDevices() {
         selectedDevice = new ArrayList();
         try {
-            System.out.println("OfficeOrder CustomerId: " + selected.getCustomerId().getCustomerId() + selected.getCustomerId().getCustomerFirstname());
             selectedDevice = deviceFacade.findDevices(selected.getCustomerId().getCustomerId());
         } catch (NullPointerException e) {
             System.out.println("OfficeOrder DevicesList Error" + e);
@@ -128,7 +127,6 @@ public class OfficeOrderController implements Serializable {
     }
 
     public void preparePartList() {
-        System.out.println("Има ли ме?");
         partList = partFacade.findAllParts();
         partForCreate = null;
         partForCreate = new Part();
@@ -201,7 +199,7 @@ public class OfficeOrderController implements Serializable {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/msgs_EN").getString("OfficeOrderUpdated"));
     }
 
-    //Custom OfficeOrder UPDATE method0
+    //Custom OfficeOrder UPDATE method
     public void updateSum() {
         partsTotalPrice = new BigDecimal(0);
         servicesTotalPrice = new BigDecimal(0);
