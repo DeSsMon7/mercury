@@ -8,7 +8,6 @@ com\ash\mercury\officeorder\pres\OfficeOrderController.class
 com\ash\mercury\invoice\model\Invoice_.class
 com\ash\mercury\part\pres\PartController$PartControllerConverter.class
 com\ash\mercury\service\pres\ServiceController$ServiceControllerConverter.class
-com\ash\mercury\servicepart\control\AbstractFacade.class
 com\ash\mercury\device\model\Device.class
 com\ash\mercury\servicepart\model\ServicePart_.class
 com\ash\mercury\device\pres\DeviceController$DeviceControllerConverter.class
@@ -18,7 +17,6 @@ com\ash\mercury\officeorder\pres\OfficeOrderController$OfficeOrderControllerConv
 com\ash\mercury\part\model\Part.class
 com\ash\mercury\invoice\pres\util\JsfUtil$PersistAction.class
 com\ash\mercury\service\pres\ServiceController.class
-com\ash\mercury\officeorder\control\AbstractFacade.class
 com\ash\mercury\part\model\Part_.class
 com\ash\mercury\service\control\ServiceFacade.class
 com\ash\mercury\service\model\Service.class
@@ -26,7 +24,6 @@ com\ash\mercury\login\Login.class
 com\ash\mercury\serviceslist\model\ServicesList.class
 com\ash\mercury\employee\pres\EmployeeController.class
 com\ash\mercury\servicepart\model\ServicePart.class
-com\ash\mercury\invoice\control\AbstractFacade.class
 com\ash\mercury\serviceslist\pres\ServicesListController$ServicesListControllerConverter.class
 com\ash\mercury\customer\model\Customer_.class
 com\ash\mercury\invoice\model\Invoice.class
