@@ -9,23 +9,25 @@
     <ui:composition>
 
         <p:dialog id="OfficeOrderDetailsDlg" widgetVar="OfficeOrderDetailsDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msgs_EN.ViewOfficeOrderTitle}">
-                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderId}"/>
-                        <h:outputText value="#{officeOrderController.selected.officeOrderId}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderId}"/>
-                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderDate}"/>
-                        <h:outputText value="#{officeOrderController.selected.officeOrderDate}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderDate}">
-                            <f:convertDateTime pattern="MM/dd/yyyy" />
-                        </h:outputText>
-                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderInfo}"/>
-                        <h:outputText value="#{officeOrderController.selected.officeOrderInfo}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderInfo}"/>
-                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_customerId}"/>
-                        <h:outputText value="#{officeOrderController.selected.customerId}" title="#{msgs_EN.ViewOfficeOrderTitle_customerId}"/>
-                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_deviceId}"/>
-                        <h:outputText value="#{officeOrderController.selected.deviceId}" title="#{msgs_EN.ViewOfficeOrderTitle_deviceId}"/>
-                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_employeeId}"/>
-                        <h:outputText value="#{officeOrderController.selected.employeeId}" title="#{msgs_EN.ViewOfficeOrderTitle_employeeId}"/>
-                        <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderSum}"/>
-                        <h:outputText value="#{officeOrderController.selected.officeOrderSum}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderSum}"/>
-                    <p:commandButton value="#{msgs_EN.Close}" onclick="OfficeOrderViewDialog.hide()"/>
+            <p:panelGrid columns="2" rendered="#{officeOrderController.selected != null}">
+                <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderId}"/>
+                <h:outputText value="#{officeOrderController.selected.officeOrderId}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderId}"/>
+                <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderDate}"/>
+                <h:outputText value="#{officeOrderController.selected.officeOrderDate}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderDate}">
+                    <f:convertDateTime pattern="MM/dd/yyyy" />
+                </h:outputText>
+                <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderInfo}"/>
+                <h:outputText value="#{officeOrderController.selected.officeOrderInfo}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderInfo}"/>
+                <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_customerId}"/>
+                <h:outputText value="#{officeOrderController.selected.customerId}" title="#{msgs_EN.ViewOfficeOrderTitle_customerId}"/>
+                <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_deviceId}"/>
+                <h:outputText value="#{officeOrderController.selected.deviceId}" title="#{msgs_EN.ViewOfficeOrderTitle_deviceId}"/>
+                <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_employeeId}"/>
+                <h:outputText value="#{officeOrderController.selected.employeeId}" title="#{msgs_EN.ViewOfficeOrderTitle_employeeId}"/>
+                <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderSum}"/>
+                <h:outputText value="#{officeOrderController.selected.officeOrderSum}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderSum}"/>
+            </p:panelGrid>
+            <p:commandButton value="#{msgs_EN.Close}" onclick="OfficeOrderDetailsDialog.hide()"/>
         </p:dialog>
 
     </ui:composition>
