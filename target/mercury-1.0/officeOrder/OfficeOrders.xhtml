@@ -65,9 +65,9 @@
                             <h:outputText value="#{officeOrderItem.deviceId.deviceType} #{officeOrderItem.deviceId.deviceModel}"/>
                         </p:column>
                         <p:column style="width:32px;text-align: center">
-                            <p:commandButton oncomplete="PF('OfficeOrderDetailsDialog').show()" icon="ui-icon-search" title="View">
+                            <p:commandLink oncomplete="PF('OfficeOrderDetailsDialog').show()" styleClass="ui-icon ui-icon-search" title="View">
                                 <f:setPropertyActionListener value="#{item}" target="#{officeOrderController.selected}" />
-                            </p:commandButton>
+                            </p:commandLink>
                         </p:column>
                     </p:dataTable>
                 </h:panelGroup>
