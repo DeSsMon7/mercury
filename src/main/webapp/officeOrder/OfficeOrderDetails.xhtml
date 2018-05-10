@@ -13,7 +13,8 @@
                   appendTo="@(body)"
                   header="#{msgs_EN.ViewOfficeOrderTitle}">
             <h:form id="OfficeOrderDetailsForm">
-                <p:panelGrid columns="2" rendered="#{officeOrderController.selected != null}">
+                <h:panelGroup id="displayDetails">
+                <h:panelGrid columns="2" rendered="#{officeOrderController.selected != null}">
                     <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderId}"/>
                     <h:outputText value="#{officeOrderController.selected.officeOrderId}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderId}"/>
                     <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderDate}"/>
@@ -30,8 +31,9 @@
                     <h:outputText value="#{officeOrderController.selected.employeeId}" title="#{msgs_EN.ViewOfficeOrderTitle_employeeId}"/>
                     <h:outputText value="#{msgs_EN.ViewOfficeOrderLabel_officeOrderSum}"/>
                     <h:outputText value="#{officeOrderController.selected.officeOrderSum}" title="#{msgs_EN.ViewOfficeOrderTitle_officeOrderSum}"/>
-                </p:panelGrid>
+                </h:panelGrid>
                 <p:commandButton value="#{msgs_EN.Close}" onclick="OfficeOrderDetailsDialog.hide()"/>
+                </h:panelGroup>
             </h:form>
         </p:dialog>
     </ui:composition>
