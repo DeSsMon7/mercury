@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="OfficeOrderViewDlg" widgetVar="OfficeOrderViewDialog" modal="true" resizable="true" appendTo="@(body)" 
+                  header="#{msgs_EN.ViewOfficeOrderTitle}" width="975"   >
+            <h:form id="OfficeOrderViewForm">
+                <h:panelGroup id="display" class="custom-panel-grp">
+                    <p:dataTable id="officeOrderViewTable" var="officeOrderItem" widgetVar="officeOrderTable"
+                                 value="#{officeOrderController.items}"
+                                 scrollable="true" 
+                                 scrollHeight="370"
+                                 selectionMode="single"
+                                 rowKey="#{officeOrderItem.officeOrderId}"
+                                 selection="#{officeOrderController.selected}">
+                        <p:column headerText="Id" id="officeOrderId" width="10">
+                            <h:outputText value="#{officeOrderItem.officeOrderId}"/>
+                        </p:column>
+                        <p:column headerText="Date" width="40">
+                            <h:outputText value="#{officeOrderItem.officeOrderDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Description" width="80" >
+                            <h:outputText value="#{officeOrderItem.officeOrderInfo}"/>
+                        </p:column>
+                        <p:column headerText="Total Price" width="30" >
+                            <h:outputText value="#{officeOrderItem.officeOrderSum}"/>
+                        </p:column>
+                        <p:column headerText="Status" width="50" >
+                            <h:outputText value="#{officeOrderItem.officeOrderServiceStatus}"/>
+                        </p:column>
+                        <p:column headerText="Customer" width="70" >
+                            <h:outputText value="#{officeOrderItem.customerId.customerFirstname} #{officeOrderItem.customerId.customerSurname}"/>
+                        </p:column>
+                        <p:column headerText="Device" width="70" >
+                            <h:outputText value="#{officeOrderItem.deviceId.deviceType} #{officeOrderItem.deviceId.deviceModel}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton process="officeOrderViewTable" update=":OfficeOrderDetailsForm" icon="ui-icon-search" value="View" oncomplete="PF('OfficeOrderDetailsDialog').show()" />
+                        </f:facet>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+        <ui:include src="OfficeOrderDetails.xhtml"/>
+    </ui:composition>
+</html>
