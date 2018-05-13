@@ -18,8 +18,15 @@
                                  scrollHeight="370"
                                  selectionMode="single"
                                  rowKey="#{officeOrderItem.officeOrderId}"
-                                 selection="#{officeOrderController.selected}">
-                        <p:column headerText="Id" id="officeOrderId" width="10">
+                                 selection="#{officeOrderController.selected}"
+                                 filteredValue="#{officeOrderController.filteredOrders}">
+                        <f:facet name="header" >
+                            <p:outputPanel style="text-align: end !important">
+                                <h:outputText value="Search all fields:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('officeOrderTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                            </p:outputPanel>
+                        </f:facet>
+                        <p:column headerText="Id" id="officeOrderId" width="10" filterBy="#{officeOrderItem.officeOrderId}" filterMatchMode="contains">
                             <h:outputText value="#{officeOrderItem.officeOrderId}"/>
                         </p:column>
                         <p:column headerText="Date" width="40">
@@ -33,13 +40,13 @@
                         <p:column headerText="Total Price" width="30" >
                             <h:outputText value="#{officeOrderItem.officeOrderSum}"/>
                         </p:column>
-                        <p:column headerText="Status" width="50" >
+                        <p:column headerText="Status" width="50" filterBy="#{officeOrderItem.officeOrderServiceStatus}" filterMatchMode="contains">
                             <h:outputText value="#{officeOrderItem.officeOrderServiceStatus}"/>
                         </p:column>
-                        <p:column headerText="Customer" width="70" >
+                        <p:column headerText="Customer" width="70" filterBy="#{officeOrderItem.customerId.customerSurname}" filterMatchMode="contains">
                             <h:outputText value="#{officeOrderItem.customerId.customerFirstname} #{officeOrderItem.customerId.customerSurname}"/>
                         </p:column>
-                        <p:column headerText="Device" width="70" >
+                        <p:column headerText="Device" width="70" filterBy="#{officeOrderItem.deviceId.deviceModel}">
                             <h:outputText value="#{officeOrderItem.deviceId.deviceType} #{officeOrderItem.deviceId.deviceModel}"/>
                         </p:column>
                         <f:facet name="footer">
