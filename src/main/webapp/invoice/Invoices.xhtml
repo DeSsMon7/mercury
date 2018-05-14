@@ -8,12 +8,16 @@
 
     <ui:composition>
 
-        <p:dialog id="InvoiceViewDlg" widgetVar="InvoiceViewDialog" modal="true" resizable="true" appendTo="@(body)" 
+        <p:dialog id="InvoiceDetailsDlg" widgetVar="InvoiceDetailsDialog" modal="true" resizable="true" appendTo="@(body)" 
                   header="#{msgs_EN.ViewOfficeOrderTitle}">
-            <h:form id="InvoiceViewForm">
+            <h:form id="InvoiceDetailsForm">
                 <h:panelGroup id="display" class="custom-panel-grp">
-                    <p:dataTable id="datalist" var="invoiceItem" widgetVar="invoiceTable" editable="true" value="#{invoiceController.items}"
-                                 scrollable="true"   scrollHeight="370" filteredValue="#{invoiceController.filteredInvoices}" >
+                    <p:dataTable id="invoiceViewTable" var="invoiceItem" widgetVar="invoiceTable" editable="true" value="#{invoiceController.items}"
+                                 scrollable="true"   scrollHeight="370" 
+                                 selectionMode="single"
+                                 rowKey="#{invoiceItem.invoiceId}"
+                                 selection="#{invoiceController.selected}"
+                                 filteredValue="#{invoiceController.filteredInvoices}" >
                         <f:facet name="header" >
                             <p:outputPanel style="text-align: end !important">
                                 <h:outputText value="Search all fields:" />
@@ -80,13 +84,13 @@
                                     </p:selectOneMenu></f:facet>
                             </p:cellEditor>
                         </p:column >
-                        <p:column  width="3">
-                            <p:rowEditor editTitle="Edit" saveTitle="Save" cancelTitle="Cancel"/>
-                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton process="invoiceViewTable" update=":InvoiceViewForm" icon="ui-icon-search" value="View" oncomplete="PF('InvoiceViewDialog').show()" />
+                        </f:facet>
                     </p:dataTable>
                 </h:panelGroup>
             </h:form>
         </p:dialog>
-
+        <ui:include src="View.xhtml"/>
     </ui:composition>
 </html>

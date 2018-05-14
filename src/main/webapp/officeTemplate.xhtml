@@ -62,7 +62,7 @@
                         </p:submenu>
                         <p:submenu label="Invoices" icon="fa fa-file-text-o fa-lg">
                             <p:menuitem value="Create Invoice" icon="fa fa-file-o fa-lg"  actionListener="#{invoiceController.prepareCreate(event)}" oncomplete="PF('InvoiceCreateDialog').show()"/>
-                            <p:menuitem value="Edit Invoice"  icon="fa fa-pencil fa-lg" oncomplete="PF('InvoiceViewDialog').show()"/>
+                            <p:menuitem value="Edit Invoice"  icon="fa fa-pencil fa-lg" oncomplete="PF('InvoiceDetailsDialog').show()"/>
                             <p:menuitem value="Print Invoice"  icon="fa fa-print fa-lg" outcome="/service/List.xhtml"/>
                         </p:submenu>
                     </p:slideMenu>
